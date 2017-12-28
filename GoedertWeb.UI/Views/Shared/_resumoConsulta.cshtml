@@ -1,0 +1,103 @@
+﻿<hr />
+@foreach (var dadosPessoas in Model)
+{
+    <div class="col-md-6">
+    <div class="well">
+        <table>
+            <tr>
+                <td rowspan="3">                    
+                    <div class="thumbnail" style="margin-right: 6%;" @*onmouseover="MarcaFoto(@dadosPessoas.id_pessoa);" onmouseout="DesmarcaFoto(@dadosPessoas.id_pessoa);"*@>
+                        <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="" />
+                        @*<span class="glyphicon glyphicon-pencil editarExcluirFoto_@dadosPessoas.id_pessoa" aria-hidden="true" style="display:none;"></span>*@
+                        @*<span class="glyphicon glyphicon-trash editarExcluirFoto_@dadosPessoas.id_pessoa" aria-hidden="true" style="display:none;"></span>*@
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-lg" onclick="ExibeModalCrud(@dadosPessoas.id_pessoa);">
+                        <b class="text-center">@dadosPessoas.nome</b>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Tipo de pessoa: @dadosPessoas.descricao
+                    <br />
+                    Documento:
+                </td>
+            </tr>
+            <tr>
+                <td class="btn-group">                    
+                    <button type="button" class="btn btn-success">Alterar</button>
+                    <button type="button" class="btn btn-danger">Remover</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </div>
+    <input type="hidden" id="nomePessoaModal" value="@Html.Raw(dadosPessoas.nome)" />
+}
+
+<div id="modalPessoas" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="max-width:1000px; width:auto;">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3><span class="modal-title text-center label label-info"></span></h3>
+            </div>
+            <div class="modal-body" style="max-height:1000px; height:auto;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    //function MarcaFoto(id_pessoa) {
+    //    $('.editarExcluirFoto_' + id_pessoa).show();
+    //}
+
+    //function DesmarcaFoto(id_pessoa) {
+    //    $('.editarExcluirFoto_' + id_pessoa).hide();
+    //}
+
+    //$('.glyphicon-pencil').mouseenter(function () {
+    //    $('.glyphicon-pencil').css('color', 'green');
+    //});
+
+    //$('.glyphicon-pencil').mouseleave(function () {
+    //    $('.glyphicon-pencil').css('color', 'black');
+    //});
+
+    //$('.glyphicon-trash').mouseenter(function () {
+    //    $('.glyphicon-trash').css('color', 'red');
+    //});
+
+    //$('.glyphicon-trash').mouseleave(function () {
+    //    $('.glyphicon-trash').css('color', 'black');
+    //});
+
+    function ExibeModalCrud (id_pessoa) {
+
+        var model = @Html.Raw(Json.Encode(Model))
+
+        $.ajax({
+            url: '@Url.Action("TelaCrud", "Consulta")',
+            type: 'POST',
+            dataType: 'html',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'idPessoa': id_pessoa,
+                'dadosPessoas': model
+            }),
+            success: function (data) {
+                $('.modal-body').html(data);
+                $('.modal-title').html('Detalhes de ' + $('#nomePessoaModal').val());
+                $('#modalPessoas').modal();
+            }
+        });
+    }
+
+</script>

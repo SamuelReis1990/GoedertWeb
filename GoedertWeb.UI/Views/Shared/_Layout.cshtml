@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geodert Web</title>
@@ -16,25 +16,30 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </button>                
+                @Html.ActionLink("Home", "Index", "Consulta", new { area = "" }, new { @class = "navbar-brand glyphicon glyphicon-home" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Consulta", "Index", "Consulta")</li>
-                    <li>@Html.ActionLink("Sobre", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contato", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Cadastro", "Index", "Cadastro")</li>
+                    @*<li>@Html.ActionLink("Contato", "Contact", "Home")</li>*@
                 </ul>
             </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Um produto Goedert Sistemas</p>
-            <p>Todos os direitos reservados</p>
-        </footer>
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - Um produto Goedert Sistemas</p>
+                    <p>Desenvolvido por Samuel Reis</p>
+                    <p>Todos os direitos reservados</p>
+                </footer>
+            </div>
+        </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

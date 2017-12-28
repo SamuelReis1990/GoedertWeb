@@ -10,7 +10,12 @@ namespace GoedertWeb.UI
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/jquery-ui.min.js"));
+                        "~/Scripts/lib/jquery-ui.min.js",
+                        "~/Scripts/lib/jquery.loading.min.js",
+                        "~/Scripts/lib/jquery-ajaxSetup.js",
+                        "~/Scripts/lib/bootstrap-datepicker.min.js",
+                        "~/Scripts/lib/bootstrap-datepicker.pt-BR.min.js",
+                        "~/Scripts/lib/jquery.mask.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -27,7 +32,10 @@ namespace GoedertWeb.UI
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                      "~/Content/jquery-ui.min.css"));
+                      "~/Content/lib/jquery-ui.min.css",
+                      "~/Content/lib/jquery.loading.min.css",
+                      "~/Content/lib/bootstrap-datepicker.min.css",
+                      "~/Content/lib/font-awesome.min.css"));
         }
     }
 }

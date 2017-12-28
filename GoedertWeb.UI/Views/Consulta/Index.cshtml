@@ -1,113 +1,76 @@
 ﻿<div class="jumbotron">
     <div class="row">
-        <h2><span class="label label-info">Pesquisar</span></h2>
+        <div class="col-md-4">
+            <h2><span class="label label-info">Pesquisar</span></h2>
+        </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 form-group">
             <label for="pesquisarNome">Nome:</label>
             <input id="pesquisarNome" type="text" class="form-control" placeholder="Digite o nome á buscar" value="">
             <input id="idPessoa" type="hidden" value="">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 form-group">
             <label for="pesquisarDocumento">Documento:</label>
             <input id="pesquisarDocumento" type="text" placeholder="Digite o número do documento" class="form-control">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 form-group">
             <label for="pesquisarUnidade">Unidade:</label>
             <input id="pesquisarUnidade" type="text" placeholder="Digite a unidade" class="form-control">
         </div>
     </div>
 </div>
 
-<div class="row" id="divDadosConsulta" style="display:none">
-    <div class="row">
-        <div class="col-md-4">
-            <label for="nomePessoa">Nome:</label>
-            <input id="nomePessoa" type="text" class="form-control" placeholder="Digite o nome" value="">
-        </div>
-        <div class="col-md-4">
-            <label for="tipoPessoa">Tipo de pessoa:</label>
-            <select class="form-control" id="tipoPessoa"></select>
-        </div>
-        <div class="col-md-4">
-            <label for="sexo">Sexo:</label>
-            <select class="form-control" id="sexo">
-                <option value="-1">Selecione o sexo</option>
-                <option value="M">Masculino</option>
-                <option value="F">Feminino</option>
-            </select>
-        </div>
-    </div>
+<div id="divResumoConsulta" style="display:none;">
 </div>
 
 @section scripts{
-    <script>
 
-        $(document).ready(function () {
+<script>
 
-            $("#pesquisarNome").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: '@ViewBag.WEB_API/api/visitantes/' + request.term + '/autoCompletePessoas',
-                        dataType: 'json',
-                        success: function (data) {
-                            response(data);
-                        },
-                    });
+    $(document).ready(function () {
+
+    $('#pesquisarNome').autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@ViewBag.WEB_API/api/visitantes/' + request.term + '/autoCompletePessoas',
+                dataType: 'json',
+                success: function (data) {
+                    response(data);
                 },
-                minLength: 3,
-                select: function (event, ui) {
-                    GetPessoas(ui.item.label);
-                }
             });
+        },
+        minLength: 3,
+        select: function (event, ui) {
+            GetPessoas(ui.item.label);
+        }
+    });
 
-            function GetPessoas(nome) {
-                $.ajax({
-                    url: '@ViewBag.WEB_API/api/visitantes/' + nome + '/pessoas',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.length > 1)
-                        {
-                            //chamar modal
-                            alert("maior que 1");
+    function GetPessoas(nome) {
+        $.ajax({
+            url: '@ViewBag.WEB_API/api/visitantes/' + nome + '/pessoas',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                    $.ajax({
+                        url: '@Url.Action("ResumoConsulta", "Consulta")',
+                        type: 'POST',
+                        dataType: 'html',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({                          
+                            'model': data
+                        }),
+                        success: function (data) {
+                            $('#divResumoConsulta').html(data);                           
+                            $('#divResumoConsulta').show();
                         }
-                        else
-                        {
-                            $('#idPessoa').val(data[0].id_pessoa);
-                            $('#nomePessoa').val(data[0].nome);
-                            $('#sexo').val(data[0].sexo);
-                            GetTipoPessoa(data[0].id_tipo_pessoa);                       
-
-                            $('#divDadosConsulta').show();
-                        }
-                    }
-                });
+                    });
             }
-
-            function GetTipoPessoa(idTipoPessoa) {
-
-                $('#tipoPessoa').empty();
-
-                $.ajax({
-                    url: '@ViewBag.WEB_API/api/visitantes/tipoPessoa',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (data) {                     
-                        $.each(data, function (i, item) {                            
-                            $('#tipoPessoa').append($('<option>', {
-                                value: item.id_tipo_pessoa,
-                                text: item.descricao
-                            }));
-                        });
-
-                        $('#tipoPessoa').val(idTipoPessoa);
-                    }
-                });
-            }
-
         });
+    }
+});
 
-    </script>
+</script>
+
 }
