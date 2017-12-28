@@ -62,7 +62,7 @@
             $('#tipoPessoaForm').empty();
 
             $.ajax({
-                url: '@ViewBag.WEB_API/api/visitantes/tipoPessoa',
+                url: '@ViewBag.WEB_API/api/pessoas/listarTipoPessoa',
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
