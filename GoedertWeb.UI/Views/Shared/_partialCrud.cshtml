@@ -32,10 +32,6 @@
                             <input type="text" class="input-sm form-control" style="height:35px;" id="dataFimVal" placeholder="dd/mm/aaaa" value="@Model.dt_fim_val" />
                         </div>
                     </div>
-                    @*<div class="col-md-4 form-group">
-                        <label for="foto">Foto:</label>
-                        <select class="form-control" id="foto"></select>
-                    </div>*@
                 </div>
             </div>
         </div>
@@ -63,18 +59,20 @@
 
             $.ajax({
                 url: '@ViewBag.WEB_API/api/pessoas/listarTipoPessoa',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    $.each(data, function (i, item) {
-                        $('#tipoPessoaForm').append($('<option>', {
-                            value: item.id_tipo_pessoa,
-                            text: item.descricao
-                        }));
-                    });
+                method: 'GET',
+                dataType: 'json'
+            }).done(function (data, status) {
+                $.each(data, function (i, item) {
+                    $('#tipoPessoaForm').append($('<option>', {
+                        value: item.id_tipo_pessoa,
+                        text: item.descricao
+                    }));
+                });
 
-                    $('#tipoPessoaForm').val('@Model.id_tipo_pessoa');
-                }
+                $('#tipoPessoaForm').val('@Model.id_tipo_pessoa');
+
+            }).fail(function (data, status) {
+
             });
         }
 

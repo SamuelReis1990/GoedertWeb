@@ -1,0 +1,86 @@
+﻿<div id="modalWebCam" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width:79%; margin-left:12%; margin-top:1%;">
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <video id="video" class="thumbnail text-center" autoplay="autoplay">
+                                Seu navegador não suporta video...
+                            </video>
+                            <canvas id="imagem" class="thumbnail" style="display:none"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-6 text-left">
+                        <button id="tirarFoto" type="button" class="btn btn-primary" onclick="TirarFotos();">Tirar Foto</button>
+                        <div class="btn-group">
+                            <button id="tirarNovamenteFoto" type="button" class="btn btn-primary" style="display:none;" onclick="TirarFotoNovamente();">Tirar outra foto</button>
+                            <button id="salvarImagem" type="button" class="btn btn-success" style="display:none;">Salvar</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-default pararWebCam" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var video = document.getElementById('video');
+    var canvas = document.getElementById('imagem');
+    var contexto = canvas.getContext('2d');
+    var pararVideo = null;
+
+    navigator.getUserMedia = navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia ||
+        navigator.oGetUserMedia;
+
+    if (navigator.getUserMedia) {
+        navigator.getUserMedia({
+            video: true
+        }, VideoStream, videoError);
+    }
+
+    function VideoStream(stream) {
+        video.src = window.URL.createObjectURL(stream);
+        pararVideo = stream.getTracks()[0];
+    }
+
+    function videoError(e) {
+        $.notify('Existe algum problema...' + e.name, { clickToHide: true, autoHide: false });
+    }
+
+    function TirarFotos() {
+        canvas.width = video.clientWidth;
+        canvas.height = video.clientHeight;
+        contexto.drawImage(video, 0, 0);
+
+        $('#imagem').show();
+        $('#video').hide();
+        $('#tirarFoto').hide();
+        $('#salvarImagem').show();
+        $('#tirarNovamenteFoto').show();
+    }
+
+    function TirarFotoNovamente() {
+        $('#imagem').hide();
+        $('#video').show();
+        $('#tirarFoto').show();
+        $('#salvarImagem').hide();
+        $('#tirarNovamenteFoto').hide();
+    }
+
+    $('.pararWebCam').click(function () {
+        pararVideo.stop();
+    });
+
+</script>

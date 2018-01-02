@@ -1,7 +1,7 @@
 ﻿<div class="jumbotron">
     <div class="row">
         <div class="col-md-4">
-            <h2><span class="label label-info">Pesquisar</span></h2>
+            <h2><span class="label label-info">Pesquisar</span></h2>            
         </div>
     </div>
     <br />
@@ -35,11 +35,13 @@
         source: function (request, response) {
             $.ajax({
                 url: '@ViewBag.WEB_API/api/pessoas/' + request.term + '/autoCompletePessoas',
-                dataType: 'json',
-                success: function (data) {
-                    response(data);
-                },
-            });
+                method: 'GET',
+                dataType: 'json'
+            }).done(function (data, status) {
+                response(data);
+            }).fail(function (data, status) {
+
+            });                                                   
         },
         minLength: 3,
         select: function (event, ui) {
@@ -50,25 +52,28 @@
     function GetPessoas(nome) {
         $.ajax({
             url: '@ViewBag.WEB_API/api/pessoas/' + nome + '/listarPessoas',
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                    $.ajax({
-                        url: '@Url.Action("ResumoConsulta", "Consulta")',
-                        type: 'POST',
-                        dataType: 'html',
-                        contentType: 'application/json; charset=utf-8',
-                        data: JSON.stringify({                          
-                            'model': data
-                        }),
-                        success: function (data) {
-                            $('#divResumoConsulta').html(data);                           
-                            $('#divResumoConsulta').show();
-                        }
-                    });
-            }
+            method: 'GET',
+            dataType: 'json'
+        }).done(function (data, status) {
+            $.ajax({
+                url: '@Url.Action("ResumoConsulta", "Consulta")',
+                method: 'POST',
+                dataType: 'html',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'model': data
+                })
+            }).done(function (data, status) {
+                $('#divResumoConsulta').html(data);
+                $('#divResumoConsulta').show();
+            }).fail(function (data, status) {
+
+            });
+        }).fail(function (data, status) {
+
         });
     }
+
 });
 
 </script>

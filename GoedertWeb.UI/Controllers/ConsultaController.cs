@@ -51,5 +51,12 @@ namespace GoedertWeb.UI.Controllers
 
             return PartialView("_partialCrud", model);
         }
+        
+        public ActionResult WebCam()
+        {
+            ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];          
+
+            return PartialView("_webCam");
+        }
     }
 }

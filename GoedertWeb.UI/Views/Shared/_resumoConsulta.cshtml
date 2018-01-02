@@ -2,37 +2,35 @@
 @foreach (var dadosPessoas in Model)
 {
     <div class="col-md-6">
-    <div class="well">
-        <table>
-            <tr>
-                <td rowspan="3">                    
-                    <div class="thumbnail" style="margin-right: 6%;" @*onmouseover="MarcaFoto(@dadosPessoas.id_pessoa);" onmouseout="DesmarcaFoto(@dadosPessoas.id_pessoa);"*@>
-                        <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="" />
-                        @*<span class="glyphicon glyphicon-pencil editarExcluirFoto_@dadosPessoas.id_pessoa" aria-hidden="true" style="display:none;"></span>*@
-                        @*<span class="glyphicon glyphicon-trash editarExcluirFoto_@dadosPessoas.id_pessoa" aria-hidden="true" style="display:none;"></span>*@
-                    </div>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-primary btn-lg" onclick="ExibeModalCrud(@dadosPessoas.id_pessoa);">
-                        <b class="text-center">@dadosPessoas.nome</b>
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Tipo de pessoa: @dadosPessoas.descricao
-                    <br />
-                    Documento:
-                </td>
-            </tr>
-            <tr>
-                <td class="btn-group">                    
-                    <button type="button" class="btn btn-success">Alterar</button>
-                    <button type="button" class="btn btn-danger">Remover</button>
-                </td>
-            </tr>
-        </table>
-    </div>
+        <div class="well">
+            <table>
+                <tr>
+                    <td rowspan="3">
+                        <div class="thumbnail" style="margin-right: 6%; cursor:pointer;" onclick="AbrirWebCam();">
+                            <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="" />
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-lg" onclick="ExibeModalCrud(@dadosPessoas.id_pessoa);">
+                            <b class="text-center">@dadosPessoas.nome</b>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Tipo de pessoa: @dadosPessoas.descricao
+                        <br />
+                        Documento:
+                    </td>
+                </tr>
+                <tr>
+                    <td class="btn-group">
+                        <button type="button" class="btn btn-success">Alterar</button>
+                        <button type="button" class="btn btn-danger">Remover</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
     <input type="hidden" id="nomePessoaModal" value="@Html.Raw(dadosPessoas.nome)" />
 }
@@ -53,50 +51,43 @@
     </div>
 </div>
 
+<div id="divWebCam"></div>
+
 <script>
-
-    //function MarcaFoto(id_pessoa) {
-    //    $('.editarExcluirFoto_' + id_pessoa).show();
-    //}
-
-    //function DesmarcaFoto(id_pessoa) {
-    //    $('.editarExcluirFoto_' + id_pessoa).hide();
-    //}
-
-    //$('.glyphicon-pencil').mouseenter(function () {
-    //    $('.glyphicon-pencil').css('color', 'green');
-    //});
-
-    //$('.glyphicon-pencil').mouseleave(function () {
-    //    $('.glyphicon-pencil').css('color', 'black');
-    //});
-
-    //$('.glyphicon-trash').mouseenter(function () {
-    //    $('.glyphicon-trash').css('color', 'red');
-    //});
-
-    //$('.glyphicon-trash').mouseleave(function () {
-    //    $('.glyphicon-trash').css('color', 'black');
-    //});
 
     function ExibeModalCrud (id_pessoa) {
 
         var model = @Html.Raw(Json.Encode(Model))
 
-        $.ajax({
-            url: '@Url.Action("TelaCrud", "Consulta")',
-            type: 'POST',
-            dataType: 'html',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({
-                'idPessoa': id_pessoa,
-                'dadosPessoas': model
-            }),
-            success: function (data) {
+            $.ajax({
+                url: '@Url.Action("TelaCrud", "Consulta")',
+                method: 'POST',
+                dataType: 'html',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'idPessoa': id_pessoa,
+                    'dadosPessoas': model
+                })
+            }).done(function (data, status) {
                 $('.modal-body').html(data);
                 $('.modal-title').html('Detalhes de ' + $('#nomePessoaModal').val());
                 $('#modalPessoas').modal();
-            }
+            }).fail(function (data, status) {
+
+            });
+    }
+
+    function AbrirWebCam() {
+        $.ajax({
+            url: '@Url.Action("WebCam", "Consulta")',
+            method: 'POST',
+            dataType: 'html'
+        }).done(function (data, status) {
+            $('#divWebCam').html(data);
+            $('.modal-title').html('Foto');
+            $('#modalWebCam').modal();
+        }).fail(function (data, status) {
+            $.notify('Erro ao abrir a web cam...', { clickToHide: true, autoHide: false });
         });
     }
 
