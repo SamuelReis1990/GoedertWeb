@@ -6,8 +6,15 @@
             <table>
                 <tr>
                     <td rowspan="3">
-                        <div class="thumbnail" style="margin-right: 6%; cursor:pointer;" onclick="AbrirWebCam();">
-                            <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="" />
+                        <div class="thumbnail" style="margin-right: 6%; cursor:pointer;" onclick="AbrirWebCam(@dadosPessoas.id_pessoa);">
+                            @if (String.IsNullOrEmpty(dadosPessoas.foto_string))
+                            {
+                                <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="" />
+                            }
+                            else
+                            {
+                                <img src="@dadosPessoas.foto_string" width="150" height="150" alt="" />
+                            }
                         </div>
                     </td>
                     <td>
@@ -73,15 +80,24 @@
                 $('.modal-title').html('Detalhes de ' + $('#nomePessoaModal').val());
                 $('#modalPessoas').modal();
             }).fail(function (data, status) {
-
+                $.notify('Erro ao abrir a modal com os dados da pessoa desejada...', { clickToHide: true, autoHide: false });
             });
     }
 
-    function AbrirWebCam() {
+    function AbrirWebCam(idPessoa) {
+
+        var model = @Html.Raw(Json.Encode(Model))
+
         $.ajax({
             url: '@Url.Action("WebCam", "Consulta")',
             method: 'POST',
-            dataType: 'html'
+            dataType: 'html',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'acao': 'A',
+                'idPessoa': idPessoa,
+                'dadosPessoas': model
+            })
         }).done(function (data, status) {
             $('#divWebCam').html(data);
             $('.modal-title').html('Foto');

@@ -72,7 +72,7 @@
                 $('#tipoPessoaForm').val('@Model.id_tipo_pessoa');
 
             }).fail(function (data, status) {
-
+                $.notify('Erro ao recuperar o tipo da pessoa...', { clickToHide: true, autoHide: false });
             });
         }
 

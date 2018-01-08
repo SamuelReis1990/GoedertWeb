@@ -1,4 +1,5 @@
 ﻿using GoedertWeb.UI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Configuration;
@@ -37,6 +38,19 @@ namespace GoedertWeb.UI.Controllers
                         dadosPessoa.descricao = "Morador";
                         break;
                 }
+
+                var imagem = Convert.ToBase64String(dadosPessoa.foto);
+
+                if (imagem.Equals("QEA=") ||imagem.Equals("AA==") || String.IsNullOrEmpty(imagem))
+                {
+                    dadosPessoa.foto_string = null;
+                    dadosPessoa.foto = null;
+                }
+                else
+                {
+                    dadosPessoa.foto_string = String.Format("data:image/png;base64,{0}", imagem);
+                    dadosPessoa.foto = null;
+                }
             }
             
             return PartialView("_resumoConsulta", model);
@@ -47,16 +61,20 @@ namespace GoedertWeb.UI.Controllers
         {
             ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
 
-            var model = dadosPessoas.Where(t => t.id_pessoa == idPessoa).SingleOrDefault();            
+            var model = dadosPessoas.Where(t => t.id_pessoa == idPessoa).SingleOrDefault();
 
             return PartialView("_partialCrud", model);
         }
         
-        public ActionResult WebCam()
+        [HttpPost]
+        public ActionResult WebCam(string acao, string idPessoa, List<DadosPessoas> dadosPessoas)
         {
-            ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];          
+            ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
+            ViewBag.ACAO = acao;
 
-            return PartialView("_webCam");
+            var model = dadosPessoas.Where(t => t.id_pessoa == idPessoa).SingleOrDefault();
+
+            return PartialView("_webCam", model);
         }
     }
 }
