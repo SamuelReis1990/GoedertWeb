@@ -1,70 +1,104 @@
 ﻿<hr />
-@foreach (var dadosPessoas in Model)
+@if (Model.Count > 0)
 {
-    <div class="col-md-6">
-        <div class="well">
-            <table>
-                <tr>
-                    <td rowspan="3">
-                        <div class="thumbnail" style="margin-right: 6%; cursor:pointer;" onclick="AbrirWebCam(@dadosPessoas.id_pessoa);">
-                            @if (String.IsNullOrEmpty(dadosPessoas.foto_string))
-                            {
-                                <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="" />
-                            }
-                            else
-                            {
-                                <img src="@dadosPessoas.foto_string" width="150" height="150" alt="" />
-                            }
-                        </div>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-primary btn-lg" onclick="ExibeModalCrud(@dadosPessoas.id_pessoa);">
-                            <b class="text-center">@dadosPessoas.nome</b>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Tipo de pessoa: @dadosPessoas.descricao
-                        <br />
-                        Documento:
-                    </td>
-                </tr>
-                <tr>
-                    <td class="btn-group">
-                        <button type="button" class="btn btn-success">Alterar</button>
-                        <button type="button" class="btn btn-danger">Remover</button>
-                    </td>
-                </tr>
-            </table>
+    foreach (var dadosPessoas in Model)
+    {
+        <div class="col-md-6">
+            <div class="well">
+                <table>
+                    <tr>
+                        <td rowspan="3">
+                            <div class="thumbnail" style="margin-right: 6%; cursor:pointer;" onclick="AbrirWebCam(@dadosPessoas.id_pessoa);">
+                                @if (String.IsNullOrEmpty(dadosPessoas.foto_string))
+                                {
+                                    <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="" />
+                                }
+                                else
+                                {
+                                    <img src="@dadosPessoas.foto_string" width="150" height="150" alt="" />
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-lg" onclick="ModalDetalhePessoa(@dadosPessoas.id_pessoa);">
+                                <b class="text-center">@dadosPessoas.nome</b>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Tipo de pessoa: @dadosPessoas.descricao
+                            <br />
+                            Documento:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="btn-group">
+                            <button type="button" class="btn btn-success" onclick="ModalAlteraPessoa(@dadosPessoas.id_pessoa);">Alterar</button>
+                            <button type="button" class="btn btn-danger" onclick="ModalRemoverPessoa(@dadosPessoas.id_pessoa);">Remover</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-    </div>
-    <input type="hidden" id="nomePessoaModal" value="@Html.Raw(dadosPessoas.nome)" />
+        <input type="hidden" id="nomePessoaModal" value="@Html.Raw(dadosPessoas.nome)" />
+    }
+}
+else
+{
+    <p><h3 class="text-center text-danger">Nenhuma informação encontrada!</h3></p>
 }
 
 <div id="modalPessoas" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg" style="max-width:1000px; width:auto;">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
                 <h3><span class="modal-title text-center label label-info"></span></h3>
             </div>
             <div class="modal-body" style="max-height:1000px; height:auto;">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <div class="div-footer-modal-pessoa">
+                    <button type="button" class="btn btn-success btn-alterar-pessoa" style="display:none;">Alterar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
             </div>
         </div>
     </div>
+</div>
+
+<div id="modalRemoverPessoas" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                <h3><span class="modal-title text-center label label-danger"></span></h3>
+            </div>
+            <div class="modal-body text-center text-danger">
+                <p><h4>Confirma a exclusão?</h4></p>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger" onclick="RemoverPessoa();">Sim</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input id="idPessoaRemover" type="hidden" value="" />
 </div>
 
 <div id="divWebCam"></div>
 
 <script>
 
-    function ExibeModalCrud (id_pessoa) {
+    var model = @Html.Raw(Json.Encode(Model))
 
-        var model = @Html.Raw(Json.Encode(Model))
+        function ModalDetalhePessoa(id_pessoa) {
+
+            $('.btn-alterar-pessoa').hide();
+            $('.div-footer-modal-pessoa').removeClass('btn-group');
 
             $.ajax({
                 url: '@Url.Action("TelaCrud", "Consulta")',
@@ -72,6 +106,7 @@
                 dataType: 'html',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
+                    'acao': 'D',
                     'idPessoa': id_pessoa,
                     'dadosPessoas': model
                 })
@@ -80,14 +115,89 @@
                 $('.modal-title').html('Detalhes de ' + $('#nomePessoaModal').val());
                 $('#modalPessoas').modal();
             }).fail(function (data, status) {
-                $.notify('Erro ao abrir a modal com os dados da pessoa desejada...', { clickToHide: true, autoHide: false });
+                $.notify('Erro ao abrir a modal de detalhe com os dados da pessoa desejada...', { clickToHide: true, autoHide: false });
             });
     }
 
+    function ModalAlteraPessoa(id_pessoa) {
+
+        $('.btn-alterar-pessoa').show();
+        $('.div-footer-modal-pessoa').addClass('btn-group');
+
+        $.ajax({
+            url: '@Url.Action("TelaCrud", "Consulta")',
+            method: 'POST',
+            dataType: 'html',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'acao': 'A',
+                'idPessoa': id_pessoa,
+                'dadosPessoas': model
+            })
+        }).done(function (data, status) {
+            $('.modal-body').html(data);
+            $('.modal-title').html('Alteração de ' + $('#nomePessoaModal').val());
+            $('#modalPessoas').modal();
+        }).fail(function (data, status) {
+            $.notify('Erro ao abrir a modal de alteração com os dados da pessoa desejada...', { clickToHide: true, autoHide: false });
+        });
+    }
+
+    function ModalRemoverPessoa(idPessoa, nome) {
+            $('.modal-title').html('Exclusão de ' + $('#nomePessoaModal').val());
+            $('#modalRemoverPessoas').modal();
+            $('#idPessoaRemover').val(idPessoa);
+            $('#nomePessoaRemover').val(nome);
+    }
+
+    function RemoverPessoa() {
+        $.ajax({
+            url: '@ViewBag.WEB_API/api/pessoas/' + $('#idPessoaRemover').val() + '/removerPessoas',
+            method: 'POST',
+            dataType: 'json'
+        }).done(function (data, status) {
+            if (data.includes("sucesso"))
+                {
+                    $.notify(data, { className: "success", clickToHide: true, autoHide: false });
+                    $(".pararWebCam").trigger("click");
+                    $('.modal-backdrop').remove();
+                    GetPessoas($('#nomePessoaModal').val());
+                }
+            else
+                {
+                    $.notify(data, { clickToHide: true, autoHide: false });
+                }
+        }).fail(function (data, status) {
+            $.notify('Erro ao remover a pessoa desejada...', { clickToHide: true, autoHide: false });
+        });
+    }
+
+    function GetPessoas(nome) {
+        $.ajax({
+            url: '@ViewBag.WEB_API/api/pessoas/' + nome + '/listarPessoas',
+            method: 'GET',
+            dataType: 'json'
+        }).done(function (data, status) {
+            $.ajax({
+                url: '@Url.Action("ResumoConsulta", "Consulta")',
+                method: 'POST',
+                dataType: 'html',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'model': data
+                })
+            }).done(function (data, status) {
+                $('#divResumoConsulta').html(data);
+                $('#divResumoConsulta').show();
+            }).fail(function (data, status) {
+                $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
+            });
+        }).fail(function (data, status) {
+            $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
+        });
+    }
+
     function AbrirWebCam(idPessoa) {
-
-        var model = @Html.Raw(Json.Encode(Model))
-
         $.ajax({
             url: '@Url.Action("WebCam", "Consulta")',
             method: 'POST',

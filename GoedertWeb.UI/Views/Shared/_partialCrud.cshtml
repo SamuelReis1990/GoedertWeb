@@ -1,41 +1,43 @@
-﻿<form id="formDadosConsulta">
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h4 class="panel-title"></h4>
-        </div>
-        <div class="panel-body" style="margin-left:10px">
-            <div class="row">
+﻿<form id="formDadosPessoa">
+    <fieldset id="fieldSetDadosPessoa" disabled="disabled">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4 class="panel-title"></h4>
+            </div>
+            <div class="panel-body" style="margin-left:10px">
                 <div class="row">
-                    <div class="col-md-4 form-group">
-                        <label for="nomePessoaForm">Nome:</label>
-                        <input id="nomePessoaForm" type="text" class="form-control" placeholder="Digite o nome" value="@Model.nome">
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="nomePessoaForm">Nome:</label>
+                            <input id="nomePessoaForm" type="text" class="form-control" placeholder="Digite o nome" value="@Model.nome">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="tipoPessoaForm">Tipo de pessoa:</label>
+                            <select class="form-control" id="tipoPessoaForm"></select>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="sexo">Sexo:</label>
+                            <select class="form-control" id="sexo">
+                                @*<option value="-1">Selecione o sexo</option>*@
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-4 form-group">
-                        <label for="tipoPessoaForm">Tipo de pessoa:</label>
-                        <select class="form-control" id="tipoPessoaForm"></select>
-                    </div>
-                    <div class="col-md-4 form-group">
-                        <label for="sexo">Sexo:</label>
-                        <select class="form-control" id="sexo">
-                            @*<option value="-1">Selecione o sexo</option>*@
-                            <option value="M">Masculino</option>
-                            <option value="F">Feminino</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 form-group">
-                        <label for="datepicker">Data Validade:</label>
-                        <div class="input-daterange input-group form-group" id="datepicker">
-                            <input type="text" class="input-sm form-control data-date-format='dd/mm/aaaa'" style="height:35px;" id="dataIniVal" placeholder="dd/mm/aaaa" value="@Model.dt_ini_val" />
-                            <span class="input-group-addon">até</span>
-                            <input type="text" class="input-sm form-control" style="height:35px;" id="dataFimVal" placeholder="dd/mm/aaaa" value="@Model.dt_fim_val" />
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="datepicker">Data Validade:</label>
+                            <div class="input-daterange input-group form-group" id="datepicker">
+                                <input type="text" class="input-sm form-control data-date-format='dd/mm/aaaa'" style="height:35px;" id="dataIniVal" placeholder="dd/mm/aaaa" value="@Model.dt_ini_val" />
+                                <span class="input-group-addon">até</span>
+                                <input type="text" class="input-sm form-control" style="height:35px;" id="dataFimVal" placeholder="dd/mm/aaaa" value="@Model.dt_fim_val" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </fieldset>
 </form>
 
 
@@ -75,6 +77,16 @@
                 $.notify('Erro ao recuperar o tipo da pessoa...', { clickToHide: true, autoHide: false });
             });
         }
+
+        function VerificaIndAcao()
+        {
+            if ('@ViewBag.IND_ACAO' == 'A')
+            {
+                $('#fieldSetDadosPessoa').prop('disabled', false)                
+            }
+        }
+
+        VerificaIndAcao();
 
     });
 

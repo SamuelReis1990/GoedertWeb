@@ -15,19 +15,21 @@
             </div>
             <div class="modal-footer">
                 <div class="row">
-                    <div class="col-md-6 text-center">
+                    <div class="col-md-6 text-left">
                         <button id="tirarFoto" type="button" class="btn btn-primary" onclick="TirarFotos();">Tirar Foto</button>
                         <div class="btn-group">
                             <button id="tirarNovamenteFoto" type="button" class="btn btn-primary" style="display:none;" onclick="TirarFotoNovamente();">Tirar outra foto</button>
                             <div id="acaoImagem" class="btn-group" style="display:none;">
                                 <button id="salvarImagem" type="button" class="btn btn-success" onclick="AlterarImagem('S')">Salvar foto</button>
-                                <button id="alterarImagem" type="button" class="btn btn-primary" onclick="AlterarImagem('A')">Alterar foto</button>
+                                <button id="alterarImagem" type="button" class="btn btn-success" onclick="AlterarImagem('A')">Alterar foto</button>
                             </div>
                         </div>
                     </div>
-                    <div id="divRemover" class="col-md-6">
-                        <button id="removerImagem" type="button" class="btn btn-danger" onclick="AlterarImagem('R')">Remover foto</button>
-                        <button type="button" class="btn btn-default pararWebCam" data-dismiss="modal">Fechar</button>
+                    <div class="col-md-6 text-right">
+                        <div id="divRemover">
+                            <button id="removerImagem" type="button" class="btn btn-danger" onclick="AlterarImagem('R')">Remover foto</button>
+                            <button type="button" class="btn btn-default pararWebCam" data-dismiss="modal">Fechar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -137,7 +139,8 @@
                 {
                     $.notify(data.mensagemRetorno, { className: "success", clickToHide: true, autoHide: false });
                     $(".pararWebCam").trigger("click");
-                    setTimeout(function () { GetPessoas('@Html.Raw(Model.nome)'); }, 150);
+                    $('.modal-backdrop').remove();
+                    GetPessoas('@Html.Raw(Model.nome)');
                 }
                 else
                 {

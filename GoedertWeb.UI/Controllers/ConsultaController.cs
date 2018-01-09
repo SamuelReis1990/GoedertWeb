@@ -21,45 +21,55 @@ namespace GoedertWeb.UI.Controllers
         {
             ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
 
-            foreach (var dadosPessoa in model)
-            {                
-                switch (dadosPessoa.id_tipo_pessoa)
-                {
-                    case "2":
-                        dadosPessoa.descricao = "Funcionário";
-                        break;
-                    case "3":
-                        dadosPessoa.descricao = "Prestador de Serviço";
-                        break;
-                    case "4":
-                        dadosPessoa.descricao = "Visitante";
-                        break;
-                    default:
-                        dadosPessoa.descricao = "Morador";
-                        break;
-                }
+            model = model ?? new List<DadosPessoas>();
 
-                var imagem = Convert.ToBase64String(dadosPessoa.foto);
+            if (model.Count > 0)
+            {
 
-                if (imagem.Equals("QEA=") ||imagem.Equals("AA==") || String.IsNullOrEmpty(imagem))
+                foreach (var dadosPessoa in model)
                 {
-                    dadosPessoa.foto_string = null;
-                    dadosPessoa.foto = null;
-                }
-                else
-                {
-                    dadosPessoa.foto_string = String.Format("data:image/png;base64,{0}", imagem);
-                    dadosPessoa.foto = null;
+                    switch (dadosPessoa.id_tipo_pessoa)
+                    {
+                        case "2":
+                            dadosPessoa.descricao = "Funcionário";
+                            break;
+                        case "3":
+                            dadosPessoa.descricao = "Prestador de Serviço";
+                            break;
+                        case "4":
+                            dadosPessoa.descricao = "Visitante";
+                            break;
+                        default:
+                            dadosPessoa.descricao = "Morador";
+                            break;
+                    }
+
+                    if (dadosPessoa.foto != null)
+                    {
+                        var imagem = Convert.ToBase64String(dadosPessoa.foto);
+
+                        if (imagem.Equals("QEA=") || imagem.Equals("AA==") || String.IsNullOrEmpty(imagem))
+                        {
+                            dadosPessoa.foto_string = null;
+                            dadosPessoa.foto = null;
+                        }
+                        else
+                        {
+                            dadosPessoa.foto_string = String.Format("data:image/png;base64,{0}", imagem);
+                            dadosPessoa.foto = null;
+                        }
+                    }
                 }
             }
-            
-            return PartialView("_resumoConsulta", model);
+
+           return PartialView("_resumoConsulta", model);
         }
 
         [HttpPost]
-        public ActionResult TelaCrud(string idPessoa, List<DadosPessoas> dadosPessoas)
+        public ActionResult TelaCrud(string acao, string idPessoa, List<DadosPessoas> dadosPessoas)
         {
             ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
+            ViewBag.IND_ACAO = acao;
 
             var model = dadosPessoas.Where(t => t.id_pessoa == idPessoa).SingleOrDefault();
 
