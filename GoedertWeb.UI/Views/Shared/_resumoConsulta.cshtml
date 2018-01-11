@@ -20,7 +20,7 @@
                             </div>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-primary btn-lg" onclick="ModalDetalhePessoa(@dadosPessoas.id_pessoa);">
+                            <button type="button" class="btn btn-primary btn-lg" onclick="ModalDetalhePessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">
                                 <b class="text-center">@dadosPessoas.nome</b>
                             </button>
                         </td>
@@ -34,15 +34,15 @@
                     </tr>
                     <tr>
                         <td class="btn-group">
-                            <button type="button" class="btn btn-success" onclick="ModalAlteraPessoa(@dadosPessoas.id_pessoa);">Alterar</button>
-                            <button type="button" class="btn btn-danger" onclick="ModalRemoverPessoa(@dadosPessoas.id_pessoa);">Remover</button>
+                            <button type="button" class="btn btn-success" onclick="ModalAlteraPessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">Alterar</button>
+                            <button type="button" class="btn btn-danger" onclick="ModalRemoverPessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">Remover</button>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
-        <input type="hidden" id="idPessoaModal" value="@Html.Raw(dadosPessoas.id_pessoa)" />
-        <input type="hidden" id="nomePessoaModal" value="@Html.Raw(dadosPessoas.nome)" />
+        <input type="hidden" id="idPessoaModal" value="" />
+        <input type="hidden" id="nomePessoaModal" value="" />
     }
 }
 else
@@ -93,8 +93,8 @@ else
 
     var model = @Html.Raw(Json.Encode(Model))
 
-        function ModalDetalhePessoa(id_pessoa) {
-
+        function ModalDetalhePessoa(id_pessoa, nome) {
+            $('#nomePessoaModal').val(nome);
             $('.btn-alterar-pessoa').hide();
             $('.div-footer-modal-pessoa').removeClass('btn-group');
 
@@ -117,10 +117,11 @@ else
             });
     }
 
-    function ModalAlteraPessoa(id_pessoa) {
-
+    function ModalAlteraPessoa(id_pessoa, nome) {
+        $('#idPessoaModal').val(id_pessoa);
+        $('#nomePessoaModal').val(nome);        
         $('.btn-alterar-pessoa').show();
-        $('.div-footer-modal-pessoa').addClass('btn-group');
+        $('.div-footer-modal-pessoa').addClass('btn-group');        
 
         $.ajax({
             url: '@Url.Action("TelaCrud", "Consulta")',
@@ -141,9 +142,11 @@ else
         });
     }
 
-    function ModalRemoverPessoa(idPessoa) {
-            $('.modal-title').html('Exclusão de ' + $('#nomePessoaModal').val());
-            $('#modalRemoverPessoas').modal();
+    function ModalRemoverPessoa(idPessoa, nome) {            
+        $('#idPessoaModal').val(id_pessoa);
+        $('#nomePessoaModal').val(nome);
+        $('.modal-title').html('Exclusão de ' + $('#nomePessoaModal').val());
+        $('#modalRemoverPessoas').modal();
     }
 
     function AlterarPessoa() {
