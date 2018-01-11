@@ -4,8 +4,137 @@
     </div>
 </div>
 
-<div class="row text-center">
-    <div class="col-md-12" style="color:red;">        
-        <h3><span class="glyphicon glyphicon-alert" aria-hidden="true" style="color:yellowgreen;"></span><p><b>Página em Construção!</b></p></h3>
+<div id="divCadastro" style="display:none;">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="divCrud"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center">
+                <div class="btn-group">
+                    <button type="button" id="btnGravarForm" onclick="GravarForm();" class="btn btn-success btn-lg" disabled="disabled">Gravar Dados</button>
+                    <button type="button" onclick="LimparForm();" class="btn btn-primary btn-lg">Limpar Dados</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<div id="divWebCam" style="display:none;">
+</div>
+
+<div id="divResumoConsulta" style="display:none;">
+</div>
+
+@section scripts{
+
+<script>
+
+    $(document).ready(function () {
+
+        function CarregaTelaCrud() {
+            $.ajax({
+                url: '@Url.Action("TelaCrud", "Cadastro")',
+                method: 'POST',
+                dataType: 'html',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'acao': 'I'
+                })
+            }).done(function (data, status) {
+                $('#divCrud').html(data);
+                $('#formCamera').show();
+                $('#divCadastro').show();
+                $('#sexo option[value=""]').show();
+            }).fail(function (data, status) {
+                $.notify('Erro ao carregar a tela de crud para inclusão de novas pessoas...', { clickToHide: true, autoHide: false });
+            });
+        }
+
+        CarregaTelaCrud();
+    });
+
+    function LimparForm() {
+        $('#formDadosPessoa').trigger("reset");
+        $('#btnGravarForm').prop("disabled", true);
+    }
+
+    function GravarForm() {
+            var formPessoa = $('#formDadosPessoa').serializeArray();
+            var formPessoaJson = { foto_string: $('#fotoString').val() };
+            $.each(formPessoa,
+                function (i, v) {
+                    formPessoaJson[v.name] = v.value;
+                });
+
+            $.ajax({
+                url: '@ViewBag.WEB_API/api/pessoas/cadastrarPessoas',
+                method: 'POST',
+                dataType: 'json',
+                data: formPessoaJson
+            }).done(function (data, status) {
+                if (data.mensagemRetorno.includes('sucesso'))
+                {
+                    $.notify(data.mensagemRetorno, { className: 'success', clickToHide: true, autoHide: false });
+                    LimparForm();
+                    GetPessoa(data.idPessoa);
+                }
+                else
+                {
+                    $.notify(data.mensagemRetorno, { clickToHide: true, autoHide: false });
+                    LimparForm();
+                }
+            }).fail(function (data, status) {
+                $.notify('Erro ao gravar os dados na tabela pessoa...', { clickToHide: true, autoHide: false });
+                LimparForm();
+            });
+    }
+
+    function CarregaWebCam() {
+        $.ajax({
+            url: '@Url.Action("WebCam", "Cadastro")',
+            method: 'POST',
+            dataType: 'html',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'acao': 'I'
+            })
+        }).done(function (data, status) {
+            $('#divWebCam').html(data).show();
+            $('.modal-title').html('Foto');
+            $('#modalWebCam').modal();
+        }).fail(function (data, status) {
+            $.notify('Erro ao abrir a web cam...', { clickToHide: true, autoHide: false });
+        });
+    }
+
+    function GetPessoa(idPessoa) {
+        $.ajax({
+            url: '@ViewBag.WEB_API/api/pessoas/' + idPessoa + '/listarPessoa',
+            method: 'GET',
+            dataType: 'json'
+        }).done(function (data, status) {
+            $.ajax({
+                url: '@Url.Action("ResumoConsulta", "Consulta")',
+                method: 'POST',
+                dataType: 'html',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'model': data
+                })
+            }).done(function (data, status) {
+                $('#divResumoConsulta').html(data).show();
+                $('#divCadastro').remove();
+            }).fail(function (data, status) {
+                $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
+            });
+        }).fail(function (data, status) {
+            $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
+        });
+    }
+
+</script>
+
+}

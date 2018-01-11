@@ -1,40 +1,40 @@
 ﻿<form id="formDadosPessoa" method="post">
-    <fieldset id="fieldSetDadosPessoa" disabled="disabled">
+    <fieldset id="fieldSetDadosPessoa">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h4 class="panel-title"></h4>
+                <h4 class="panel-title"><span id="formCamera" onclick="CarregaWebCam();" class="glyphicon glyphicon-camera" aria-hidden="true" style="cursor:pointer;  display:none;"></span></h4>
             </div>
             <div class="panel-body" style="margin-left:10px">
                 <div class="row">
                     <div class="row">
                         <div class="col-md-4 form-group">
-                            <label for="nomePessoaForm" class="control-label">Nome: <i style="color:red;" class="glyphicon glyphicon-asterisk small"></i></label>
+                            <label for="nomePessoaForm" class="control-label">Nome: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <i class="glyphicon glyphicon-user"></i>
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                 </span>
-                                <input id="nomePessoaForm" name="nome" type="text" class="form-control" placeholder="Digite o nome" value="@Model.nome" data-error="Por favor, informe um nome." required >
+                                <input id="nomePessoaForm" name="nome" type="text" class="form-control" placeholder="Digite o nome" value="@Model.nome" data-minlength="3" data-error="Por favor, informe um nome com no mínimo 3 caracteres." required>
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="col-md-4 form-group">
-                            <label for="tipoPessoaForm" class="control-label">Tipo de pessoa: <i style="color:red;" class="glyphicon glyphicon-asterisk small"></i></label>
+                            <label for="tipoPessoaForm" class="control-label">Tipo de pessoa: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <i class="glyphicon glyphicon-list"></i>
+                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                 </span>
                                 <select class="form-control" id="tipoPessoaForm" name="id_tipo_pessoa" data-error="Por favor, informe um tipo de pessoa." required></select>
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="col-md-4 form-group">
-                            <label for="sexo" class="control-label">Sexo: <i style="color:red;" class="glyphicon glyphicon-asterisk small"></i></label>
+                            <label for="sexo" class="control-label">Sexo: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
                             <div class="input-group" style="margin-right:10px;">
                                 <span class="input-group-addon">
-                                    <i class="glyphicon glyphicon-list"></i>
+                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                 </span>
                                 <select class="form-control" id="sexo" name="sexo" data-error="Por favor, informe o sexo." required>
-                                    @*<option value="-1">Selecione o sexo</option>*@
+                                    <option value="" style="display:none;">Selecione o sexo</option>
                                     <option value="M">Masculino</option>
                                     <option value="F">Feminino</option>
                                 </select>
@@ -47,7 +47,7 @@
                             <label for="datepicker" class="control-label">Data Validade:</label>
                             <div class="input-daterange input-group form-group" id="datepicker">
                                 <span class="input-group-addon">
-                                    <i class="glyphicon glyphicon-calendar"></i>
+                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
                                 </span>
                                 <input type="text" class="input-sm form-control data-date-format='dd/mm/aaaa'" style="height:35px;" id="dataIniVal" name="dt_ini_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_ini_val" data-validaDataInicial />
                                 <span class="input-group-addon">até</span>
@@ -58,15 +58,15 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4 form-group">
-                            <p class="text-muted small"><i>Os campos com </i><i style="color:red;" class="glyphicon glyphicon-asterisk"></i><i> são obrigatórios</i></p>
+                            <p class="text-muted small"><i>Os campos com </i><span style="color:red;" class="glyphicon glyphicon-asterisk" aria-hidden="true"></span><i> são obrigatórios</i></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <input id="fotoString" type="hidden" value="" />
     </fieldset>
 </form>
-
 
 <script>
 
@@ -83,7 +83,7 @@
                         else {
                             $('#divMensagemErroData').hide();
                         }
-                    }                   
+                    }
                 },
                 'validaDataFinal': function ($el) {
                     if ($('#dataFimVal').val() != '' && $('#dataIniVal').val() != '') {
@@ -101,10 +101,23 @@
 
         $('#formDadosPessoa').on('valid.bs.validator', function () {
             $('.btn-alterar-pessoa').prop("disabled", false);
+
+            if (!$('.list-unstyled').is(":visible") && !$('#divMensagemErroData').is(":visible")) {
+                $('#btnGravarForm').prop("disabled", false);
+            }
+
+            $('#formDadosPessoa').find('select, textarea, input').each(function () {
+                if ($(this).prop('required')) {
+                    if ($(this).val() == '') {
+                        $('#btnGravarForm').prop("disabled", true);
+                    }
+                }
+            });
         });
 
         $('#formDadosPessoa').on('invalid.bs.validator', function () {
             $('.btn-alterar-pessoa').prop("disabled", true);
+            $('#btnGravarForm').prop("disabled", true);
         });
 
         $('#dataIniVal').change(function () {
@@ -140,6 +153,14 @@
                 method: 'GET',
                 dataType: 'json'
             }).done(function (data, status) {
+
+                if ('@ViewBag.IND_ACAO' == 'I') {
+                        $('#tipoPessoaForm').append($('<option>', {
+                            value: '',
+                            text: 'Selecione o tipo de pessoa'
+                        }));
+                }
+
                 $.each(data, function (i, item) {
                     $('#tipoPessoaForm').append($('<option>', {
                         value: item.id_tipo_pessoa,
@@ -156,14 +177,13 @@
 
         function VerificaIndAcao()
         {
-            if ('@ViewBag.IND_ACAO' == 'A')
+            if ('@ViewBag.IND_ACAO' == 'D')
             {
-                $('#fieldSetDadosPessoa').prop('disabled', false)
+                $('#fieldSetDadosPessoa').prop('disabled', true)
             }
         }
 
         VerificaIndAcao();
-
     });
 
 </script>

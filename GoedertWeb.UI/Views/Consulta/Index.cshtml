@@ -64,8 +64,7 @@
                     'model': data
                 })
             }).done(function (data, status) {
-                $('#divResumoConsulta').html(data);
-                $('#divResumoConsulta').show();
+                $('#divResumoConsulta').html(data).show();
             }).fail(function (data, status) {
                 $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
             });

@@ -87,7 +87,8 @@ else
     </div>
 </div>
 
-<div id="divWebCam"></div>
+<div id="divWebCam" style="display:none;">
+</div>
 
 <script>
 
@@ -249,7 +250,7 @@ else
                 'dadosPessoas': model
             })
         }).done(function (data, status) {
-            $('#divWebCam').html(data);
+            $('#divWebCam').html(data).show();
             $('.modal-title').html('Foto');
             $('#modalWebCam').modal();
         }).fail(function (data, status) {
