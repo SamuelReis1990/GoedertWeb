@@ -11,11 +11,11 @@
                             <div class="thumbnail" style="margin-right: 6%; cursor:pointer;" onclick="AbrirWebCam(@dadosPessoas.id_pessoa);">
                                 @if (String.IsNullOrEmpty(dadosPessoas.foto_string))
                                 {
-                                    <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="foto" />
+                                    <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="foto_@dadosPessoas.id_pessoa" />
                                 }
                                 else
                                 {
-                                    <img src="@dadosPessoas.foto_string" width="150" height="150" alt="foto" />
+                                    <img src="@dadosPessoas.foto_string" width="150" height="150" alt="foto_@dadosPessoas.id_pessoa" />
                                 }
                             </div>
                         </td>
@@ -93,28 +93,28 @@ else
 
     var model = @Html.Raw(Json.Encode(Model))
 
-        function ModalDetalhePessoa(id_pessoa, nome) {
-            $('#nomePessoaModal').val(nome);
-            $('.btn-alterar-pessoa').hide();
-            $('.div-footer-modal-pessoa').removeClass('btn-group');
+    function ModalDetalhePessoa(id_pessoa, nome) {
+        $('#nomePessoaModal').val(nome);
+        $('.btn-alterar-pessoa').hide();
+        $('.div-footer-modal-pessoa').removeClass('btn-group');
 
-            $.ajax({
-                url: '@Url.Action("TelaCrud", "Consulta")',
-                method: 'POST',
-                dataType: 'html',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({
-                    'acao': 'D',
-                    'idPessoa': id_pessoa,
-                    'dadosPessoas': model
-                })
-            }).done(function (data, status) {
-                $('.modal-body-dados-pessoas').html(data);
-                $('.modal-title').html('Detalhes de ' + $('#nomePessoaModal').val());
-                $('#modalPessoas').modal();
-            }).fail(function (data, status) {
-                $.notify('Erro ao abrir a modal de detalhe com os dados da pessoa desejada...', { clickToHide: true, autoHide: false });
-            });
+        $.ajax({
+            url: '@Url.Action("TelaCrud", "Consulta")',
+            method: 'POST',
+            dataType: 'html',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'acao': 'D',
+                'idPessoa': id_pessoa,
+                'dadosPessoas': model
+            })
+        }).done(function (data, status) {
+            $('.modal-body-dados-pessoas').html(data);
+            $('.modal-title').html('Detalhes de ' + $('#nomePessoaModal').val());
+            $('#modalPessoas').modal();
+        }).fail(function (data, status) {
+            $.notify('Erro ao abrir a modal de detalhe com os dados da pessoa desejada...', { clickToHide: true, autoHide: false });
+        });
     }
 
     function ModalAlteraPessoa(id_pessoa, nome) {
@@ -142,7 +142,7 @@ else
         });
     }
 
-    function ModalRemoverPessoa(idPessoa, nome) {            
+    function ModalRemoverPessoa(id_pessoa, nome) {            
         $('#idPessoaModal').val(id_pessoa);
         $('#nomePessoaModal').val(nome);
         $('.modal-title').html('Exclusão de ' + $('#nomePessoaModal').val());
@@ -151,7 +151,7 @@ else
 
     function AlterarPessoa() {
         var formPessoa = $('#formDadosPessoa').serializeArray();
-        var fotoString = $('img[alt="foto"]').attr('src');
+        var fotoString = $('img[alt="foto_' + $('#idPessoaModal').val() + '"]').attr('src');
 
         if (fotoString.includes('sem_imagem.png'))
         {
