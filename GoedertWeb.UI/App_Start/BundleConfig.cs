@@ -16,7 +16,8 @@ namespace GoedertWeb.UI
                         "~/Scripts/lib/bootstrap-datepicker.min.js",
                         "~/Scripts/lib/bootstrap-datepicker.pt-BR.min.js",
                         "~/Scripts/lib/jquery.mask.min.js",
-                        "~/Scripts/lib/notify.min.js"));
+                        "~/Scripts/lib/notify.min.js",
+                        "~/Scripts/lib/validator.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));

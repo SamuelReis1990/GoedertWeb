@@ -25,7 +25,6 @@ namespace GoedertWeb.UI.Controllers
 
             if (model.Count > 0)
             {
-
                 foreach (var dadosPessoa in model)
                 {
                     switch (dadosPessoa.id_tipo_pessoa)
@@ -58,6 +57,20 @@ namespace GoedertWeb.UI.Controllers
                             dadosPessoa.foto_string = String.Format("data:image/png;base64,{0}", imagem);
                             dadosPessoa.foto = null;
                         }
+                    }
+
+                    if (!String.IsNullOrEmpty(dadosPessoa.dt_ini_val))
+                    {
+                        dadosPessoa.dt_ini_val = dadosPessoa.dt_ini_val.Replace("T00:00:00", "");
+                        string[] dt_ini_val = dadosPessoa.dt_ini_val.Split('-');
+                        dadosPessoa.dt_ini_val = dt_ini_val[2] + '/' + dt_ini_val[1] + '/' + dt_ini_val[0];
+                    }
+
+                    if (!String.IsNullOrEmpty(dadosPessoa.dt_fim_val))
+                    {
+                        dadosPessoa.dt_fim_val = dadosPessoa.dt_fim_val.Replace("T00:00:00", "");
+                        string[] dt_fim_val = dadosPessoa.dt_fim_val.Split('-');
+                        dadosPessoa.dt_fim_val = dt_fim_val[2] + '/' + dt_fim_val[1] + '/' + dt_fim_val[0];
                     }
                 }
             }

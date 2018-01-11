@@ -1,4 +1,4 @@
-﻿<form id="formDadosPessoa">
+﻿<form id="formDadosPessoa" method="post">
     <fieldset id="fieldSetDadosPessoa" disabled="disabled">
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -8,30 +8,56 @@
                 <div class="row">
                     <div class="row">
                         <div class="col-md-4 form-group">
-                            <label for="nomePessoaForm">Nome:</label>
-                            <input id="nomePessoaForm" type="text" class="form-control" placeholder="Digite o nome" value="@Model.nome">
+                            <label for="nomePessoaForm" class="control-label">Nome: <i style="color:red;" class="glyphicon glyphicon-asterisk small"></i></label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                </span>
+                                <input id="nomePessoaForm" name="nome" type="text" class="form-control" placeholder="Digite o nome" value="@Model.nome" data-error="Por favor, informe um nome." required >
+                            </div>
+                            <div class="help-block with-errors"></div>
                         </div>
                         <div class="col-md-4 form-group">
-                            <label for="tipoPessoaForm">Tipo de pessoa:</label>
-                            <select class="form-control" id="tipoPessoaForm"></select>
+                            <label for="tipoPessoaForm" class="control-label">Tipo de pessoa: <i style="color:red;" class="glyphicon glyphicon-asterisk small"></i></label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-list"></i>
+                                </span>
+                                <select class="form-control" id="tipoPessoaForm" name="id_tipo_pessoa" data-error="Por favor, informe um tipo de pessoa." required></select>
+                            </div>
+                            <div class="help-block with-errors"></div>
                         </div>
                         <div class="col-md-4 form-group">
-                            <label for="sexo">Sexo:</label>
-                            <select class="form-control" id="sexo">
-                                @*<option value="-1">Selecione o sexo</option>*@
-                                <option value="M">Masculino</option>
-                                <option value="F">Feminino</option>
-                            </select>
+                            <label for="sexo" class="control-label">Sexo:</label>
+                            <div class="input-group" style="margin-right:10px;">
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-list"></i>
+                                </span>
+                                <select class="form-control" id="sexo" name="sexo">
+                                    @*<option value="-1">Selecione o sexo</option>*@
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Feminino</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 form-group">
-                            <label for="datepicker">Data Validade:</label>
+                            <label for="datepicker" class="control-label">Data Validade:</label>
                             <div class="input-daterange input-group form-group" id="datepicker">
-                                <input type="text" class="input-sm form-control data-date-format='dd/mm/aaaa'" style="height:35px;" id="dataIniVal" placeholder="dd/mm/aaaa" value="@Model.dt_ini_val" />
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </span>
+                                <input type="text" class="input-sm form-control data-date-format='dd/mm/aaaa'" style="height:35px;" id="dataIniVal" name="dt_ini_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_ini_val" data-validaDatas />
                                 <span class="input-group-addon">até</span>
-                                <input type="text" class="input-sm form-control" style="height:35px;" id="dataFimVal" placeholder="dd/mm/aaaa" value="@Model.dt_fim_val" />
+                                <input type="text" class="input-sm form-control" style="height:35px;" id="dataFimVal" name="dt_fim_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_fim_val" data-validaDatas />
                             </div>
+                            <div id="divMensagemErroData" style="display:none;" class="text-danger"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <p class="text-muted small"><i>Os campos com </i><i style="color:red;" class="glyphicon glyphicon-asterisk"></i><i> são obrigatórios</i></p>
                         </div>
                     </div>
                 </div>
@@ -45,11 +71,43 @@
 
     $(document).ready(function () {
 
+        $('#formDadosPessoa').validator({
+            custom: {
+                'validaDatas': function ($el) {
+                    if ($('#dataIniVal').val() > $('#dataFimVal').val()) {
+
+                        return $('#divMensagemErroData').html('<p>Data inicial não pode ser maior que a data final.</p>').show();
+                    }
+                    else
+                    {
+                         $('#divMensagemErroData').hide();
+                    }
+
+                    if ($('#dataFimVal').val() > new Date().toLocaleDateString())
+                    {
+                        return $('#divMensagemErroData').html('<p>Data final não pode ser maior que a data atual.</p>').show();
+                    }
+                    else
+                    {
+                        $('#divMensagemErroData').hide();
+                    }
+                }
+            }
+        });
+
+        $('#formDadosPessoa').on('valid.bs.validator', function () {
+            $('.btn-alterar-pessoa').prop("disabled", false);
+        });
+
+        $('#formDadosPessoa').on('invalid.bs.validator', function () {
+            $('.btn-alterar-pessoa').prop("disabled", true);
+        });
+
         $('#dataIniVal').mask('99/99/9999');
-        $('#dataIniVal').datepicker({ orientation: 'bottom auto', autoclose: true, format: 'dd/mm/yyyy', forceParse: false, language: 'pt-BR', forceParse: false });
+        $('#dataIniVal').datepicker({ orientation: 'bottom auto', autoclose: true, format: 'dd/mm/yyyy', forceParse: true, language: 'pt-BR', forceParse: true });
 
         $('#dataFimVal').mask('99/99/9999');
-        $('#dataFimVal').datepicker({ orientation: 'bottom auto', autoclose: true, format: 'dd/mm/yyyy', forceParse: false, language: 'pt-BR', forceParse: false });
+        $('#dataFimVal').datepicker({ orientation: 'bottom auto', autoclose: true, format: 'dd/mm/yyyy', forceParse: true, language: 'pt-BR', forceParse: true });
 
         $('#sexo').val('@Model.sexo');
 
@@ -82,7 +140,7 @@
         {
             if ('@ViewBag.IND_ACAO' == 'A')
             {
-                $('#fieldSetDadosPessoa').prop('disabled', false)                
+                $('#fieldSetDadosPessoa').prop('disabled', false)
             }
         }
 

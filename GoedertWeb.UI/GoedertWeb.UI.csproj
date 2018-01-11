@@ -198,6 +198,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\lib\jquery.mask.min.js" />
     <Content Include="Scripts\lib\notify.min.js" />
+    <Content Include="Scripts\lib\validator.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />

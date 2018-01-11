@@ -12,7 +12,6 @@ namespace GoedertWeb.UI.Models
         public string nome { get; set; }
         public string sexo { get; set; }
         public byte[] foto { get; set; }
-        public string old_id { get; set; }
         public string dt_ini_val { get; set; }
         public string dt_fim_val { get; set; }
         public string descricao { get; set; }

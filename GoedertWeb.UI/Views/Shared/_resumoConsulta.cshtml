@@ -11,11 +11,11 @@
                             <div class="thumbnail" style="margin-right: 6%; cursor:pointer;" onclick="AbrirWebCam(@dadosPessoas.id_pessoa);">
                                 @if (String.IsNullOrEmpty(dadosPessoas.foto_string))
                                 {
-                                    <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="" />
+                                    <img src="~/Content/img/sem_imagem.png" width="150" height="150" alt="foto" />
                                 }
                                 else
                                 {
-                                    <img src="@dadosPessoas.foto_string" width="150" height="150" alt="" />
+                                    <img src="@dadosPessoas.foto_string" width="150" height="150" alt="foto" />
                                 }
                             </div>
                         </td>
@@ -41,6 +41,7 @@
                 </table>
             </div>
         </div>
+        <input type="hidden" id="idPessoaModal" value="@Html.Raw(dadosPessoas.id_pessoa)" />
         <input type="hidden" id="nomePessoaModal" value="@Html.Raw(dadosPessoas.nome)" />
     }
 }
@@ -52,15 +53,14 @@ else
 <div id="modalPessoas" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg" style="max-width:1000px; width:auto;">
         <div class="modal-content">
-            <div class="modal-header text-center">
-                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+            <div class="modal-header text-center">                
                 <h3><span class="modal-title text-center label label-info"></span></h3>
             </div>
             <div class="modal-body modal-body-dados-pessoas" style="max-height:1000px; height:auto;">
             </div>
             <div class="modal-footer">
                 <div class="div-footer-modal-pessoa">
-                    <button type="button" class="btn btn-success btn-alterar-pessoa" style="display:none;">Alterar</button>
+                    <button type="button" class="btn btn-success btn-alterar-pessoa" style="display:none;" onclick="AlterarPessoa();">Alterar</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                 </div>
             </div>
@@ -71,8 +71,7 @@ else
 <div id="modalRemoverPessoas" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header text-center">
-                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+            <div class="modal-header text-center">                
                 <h3><span class="modal-title text-center label label-danger"></span></h3>
             </div>
             <div class="modal-body text-center text-danger">
@@ -86,7 +85,6 @@ else
             </div>
         </div>
     </div>
-    <input id="idPessoaRemover" type="hidden" value="" />
 </div>
 
 <div id="divWebCam"></div>
@@ -143,23 +141,62 @@ else
         });
     }
 
-    function ModalRemoverPessoa(idPessoa, nome) {
+    function ModalRemoverPessoa(idPessoa) {
             $('.modal-title').html('Exclusão de ' + $('#nomePessoaModal').val());
             $('#modalRemoverPessoas').modal();
-            $('#idPessoaRemover').val(idPessoa);
-            $('#nomePessoaRemover').val(nome);
+    }
+
+    function AlterarPessoa() {
+        var formPessoa = $('#formDadosPessoa').serializeArray();
+        var fotoString = $('img[alt="foto"]').attr('src');
+
+        if (fotoString.includes('sem_imagem.png'))
+        {
+            fotoString = '';
+        }
+        else
+        {
+            fotoString = fotoString.replace('data:image/png;base64,', '');
+        }
+
+        var formPessoaJson = { foto_string: fotoString };
+        $.each(formPessoa,
+            function (i, v) {
+                formPessoaJson[v.name] = v.value;
+            });
+
+        $.ajax({
+            url: '@ViewBag.WEB_API/api/pessoas/' + $('#idPessoaModal').val() + '/atualizarPessoas',
+            method: 'POST',
+            dataType: 'json',
+            data: formPessoaJson
+        }).done(function (data, status) {
+            if (data.mensagemRetorno.includes('sucesso'))
+                {
+                    $.notify(data.mensagemRetorno, { className: 'success', clickToHide: true, autoHide: false });
+                    $('.pararWebCam').trigger('click');
+                    $('.modal-backdrop').remove();
+                    GetPessoas(data.nome);
+                }
+            else
+                {
+                    $.notify(data.mensagemRetorno, { clickToHide: true, autoHide: false });
+                }
+        }).fail(function (data, status) {
+            $.notify('Erro ao atualizar a pessoa desejada...', { clickToHide: true, autoHide: false });
+        });
     }
 
     function RemoverPessoa() {
         $.ajax({
-            url: '@ViewBag.WEB_API/api/pessoas/' + $('#idPessoaRemover').val() + '/removerPessoas',
+            url: '@ViewBag.WEB_API/api/pessoas/' + $('#idPessoaModal').val() + '/removerPessoas',
             method: 'POST',
             dataType: 'json'
         }).done(function (data, status) {
-            if (data.includes("sucesso"))
+            if (data.includes('sucesso'))
                 {
-                    $.notify(data, { className: "success", clickToHide: true, autoHide: false });
-                    $(".pararWebCam").trigger("click");
+                    $.notify(data, { className: 'success', clickToHide: true, autoHide: false });
+                    $('.pararWebCam').trigger('click');
                     $('.modal-backdrop').remove();
                     GetPessoas($('#nomePessoaModal').val());
                 }

@@ -106,56 +106,53 @@
     function AlterarImagem(acaoImagem)
     {
         var canvasUrl = canvas.toDataURL();
-        var textoErro = "";
+        var textoErro = '';
 
         if (acaoImagem == 'A')
         {
             canvasUrl = canvasUrl.replace('data:image/png;base64,', '');
-            textoErro = "Erro ao alterar imagem";
+            textoErro = 'Erro ao alterar imagem';
         }
         else
         {
             canvasUrl = null;
-            textoErro = "Erro ao remover imagem";
+            textoErro = 'Erro ao remover imagem';
         }
 
-            $.ajax({
-            url: '@ViewBag.WEB_API/api/pessoas/@Html.Raw(Model.id_pessoa)/atualizarPessoas',
-            method: 'POST',
-            dataType: 'json',
-            data: {
-                'foto_string': canvasUrl,
-                'id_tipo_pessoa': '@Html.Raw(Model.id_tipo_pessoa)',
-                'nome': '@Html.Raw(Model.nome)',
-                'sexo': '@Html.Raw(Model.sexo)',
-                'foto': '@Html.Raw(Model.foto)',
-                'old_id': '@Html.Raw(Model.old_id)',
-                'dt_ini_val': '@Html.Raw(Model.dt_ini_val)',
-                'dt_fim_val': '@Html.Raw(Model.dt_fim_val)',
-                'descricao': '@Html.Raw(Model.descricao)'
+        $.ajax({
+        url: '@ViewBag.WEB_API/api/pessoas/@Html.Raw(Model.id_pessoa)/atualizarPessoas',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            'foto_string': canvasUrl,
+            'id_tipo_pessoa': '@Html.Raw(Model.id_tipo_pessoa)',
+            'nome': '@Html.Raw(Model.nome)',
+            'sexo': '@Html.Raw(Model.sexo)',
+            'dt_ini_val_string': '@Html.Raw(Model.dt_ini_val)',
+            'dt_fim_val_string': '@Html.Raw(Model.dt_fim_val)'
+        }
+        }).done(function (data, status) {
+            if (data.mensagemRetorno.includes('sucesso'))
+            {
+                $.notify(data.mensagemRetorno, { className: 'success', clickToHide: true, autoHide: false });
+                $('.pararWebCam').trigger('click');
+                $('.modal-backdrop').remove();
+                GetPessoas('@Html.Raw(Model.nome)');
             }
-            }).done(function (data, status) {
-                if (data.mensagemRetorno.includes("sucesso"))
-                {
-                    $.notify(data.mensagemRetorno, { className: "success", clickToHide: true, autoHide: false });
-                    $(".pararWebCam").trigger("click");
-                    $('.modal-backdrop').remove();
-                    GetPessoas('@Html.Raw(Model.nome)');
-                }
-                else
-                {
-                    $.notify(data.mensagemRetorno, { clickToHide: true, autoHide: false });
-                }
-                }).fail(function (data, status) {
-                if ('@ViewBag.ACAO' == 'A')
-                {
-                    $.notify(textoErro, { clickToHide: true, autoHide: false });
-                }
-                else
-                {
-                    $.notify('Erro ao salvar imagem', { clickToHide: true, autoHide: false });
-                }
-            });
+            else
+            {
+                $.notify(data.mensagemRetorno, { clickToHide: true, autoHide: false });
+            }
+            }).fail(function (data, status) {
+            if ('@ViewBag.ACAO' == 'A')
+            {
+                $.notify(textoErro, { clickToHide: true, autoHide: false });
+            }
+            else
+            {
+                $.notify('Erro ao salvar imagem', { clickToHide: true, autoHide: false });
+            }
+        });
     }
 
     function GetPessoas(nome) {
