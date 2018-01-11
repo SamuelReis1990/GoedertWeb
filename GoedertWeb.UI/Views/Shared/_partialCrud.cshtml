@@ -28,17 +28,18 @@
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="col-md-4 form-group">
-                            <label for="sexo" class="control-label">Sexo:</label>
+                            <label for="sexo" class="control-label">Sexo: <i style="color:red;" class="glyphicon glyphicon-asterisk small"></i></label>
                             <div class="input-group" style="margin-right:10px;">
                                 <span class="input-group-addon">
                                     <i class="glyphicon glyphicon-list"></i>
                                 </span>
-                                <select class="form-control" id="sexo" name="sexo">
+                                <select class="form-control" id="sexo" name="sexo" data-error="Por favor, informe o sexo." required>
                                     @*<option value="-1">Selecione o sexo</option>*@
                                     <option value="M">Masculino</option>
                                     <option value="F">Feminino</option>
                                 </select>
                             </div>
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="row">
