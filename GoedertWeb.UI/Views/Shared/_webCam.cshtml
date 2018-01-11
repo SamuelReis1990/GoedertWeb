@@ -16,7 +16,7 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-md-6 text-left">
-                        <button id="tirarFoto" type="button" class="btn btn-primary" onclick="TirarFotos();">Tirar Foto</button>
+                        <button id="tirarFoto" type="button" class="btn btn-primary" disabled="disabled" onclick="TirarFotos();">Tirar Foto</button>
                         <div class="btn-group">
                             <button id="tirarNovamenteFoto" type="button" class="btn btn-primary" style="display:none;" onclick="TirarFotoNovamente();">Tirar outra foto</button>
                             <div id="acaoImagem" class="btn-group" style="display:none;">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-6 text-right">
                         <div id="divRemover">
-                            <button id="removerImagem" type="button" class="btn btn-danger" onclick="AlterarImagem('R')">Remover foto</button>
+                            <button id="removerImagem" type="button" class="btn btn-danger" disabled="disabled" onclick="AlterarImagem('R')">Remover foto</button>
                             <button type="button" class="btn btn-default pararWebCam" data-dismiss="modal">Fechar</button>
                         </div>
                     </div>
@@ -58,11 +58,13 @@
 
     function VideoStream(stream) {
         video.src = window.URL.createObjectURL(stream);
+        $('#tirarFoto').prop("disabled", false);
+        $('#removerImagem').prop("disabled", false);
         pararVideo = stream.getTracks()[0];
     }
 
     function videoError(e) {
-        $.notify('Existe algum problema...' + e.name, { clickToHide: true, autoHide: false });
+        $.notify('Existe algum problema...' + e.name, { clickToHide: true, autoHide: false });       
     }
 
     function TirarFotos() {
