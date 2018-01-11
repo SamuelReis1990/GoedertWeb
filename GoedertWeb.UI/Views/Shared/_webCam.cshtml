@@ -1,4 +1,4 @@
-﻿<div id="modalWebCam" class="modal fade" role="dialog">
+﻿<div id="modalWebCam" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" style="width:79%; margin-left:12%; margin-top:1%;">
             <div class="modal-body">
@@ -28,7 +28,7 @@
                     <div class="col-md-6 text-right">
                         <div id="divRemover">
                             <button id="removerImagem" type="button" class="btn btn-danger" disabled="disabled" onclick="AlterarImagem('R')">Remover foto</button>
-                            <button type="button" class="btn btn-default pararWebCam" data-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-default pararWebCam" data-dismiss="modal" disabled="disabled" >Fechar</button>
                         </div>
                     </div>
                 </div>
@@ -60,11 +60,13 @@
         video.src = window.URL.createObjectURL(stream);
         $('#tirarFoto').prop("disabled", false);
         $('#removerImagem').prop("disabled", false);
+        $('.pararWebCam').prop("disabled", false);
         pararVideo = stream.getTracks()[0];
     }
 
     function videoError(e) {
-        $.notify('Existe algum problema...' + e.name, { clickToHide: true, autoHide: false });       
+        $.notify('Existe algum problema...' + e.name, { clickToHide: true, autoHide: false });
+        $('.pararWebCam').prop("disabled", false);
     }
 
     function TirarFotos() {
