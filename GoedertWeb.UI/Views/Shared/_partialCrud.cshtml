@@ -48,9 +48,9 @@
                                 <span class="input-group-addon">
                                     <i class="glyphicon glyphicon-calendar"></i>
                                 </span>
-                                <input type="text" class="input-sm form-control data-date-format='dd/mm/aaaa'" style="height:35px;" id="dataIniVal" name="dt_ini_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_ini_val" data-validaDatas />
+                                <input type="text" class="input-sm form-control data-date-format='dd/mm/aaaa'" style="height:35px;" id="dataIniVal" name="dt_ini_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_ini_val" data-validaDataInicial />
                                 <span class="input-group-addon">até</span>
-                                <input type="text" class="input-sm form-control" style="height:35px;" id="dataFimVal" name="dt_fim_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_fim_val" data-validaDatas />
+                                <input type="text" class="input-sm form-control" style="height:35px;" id="dataFimVal" name="dt_fim_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_fim_val" data-validaDataFinal />
                             </div>
                             <div id="divMensagemErroData" style="display:none;" class="text-danger"></div>
                         </div>
@@ -73,23 +73,26 @@
 
         $('#formDadosPessoa').validator({
             custom: {
-                'validaDatas': function ($el) {
-                    if ($('#dataIniVal').val() > $('#dataFimVal').val()) {
+                'validaDataInicial': function ($el) {
+                    if ($('#dataIniVal').val() != '' && $('#dataFimVal').val() != '') {
+                        if ($('#dataIniVal').val() > $('#dataFimVal').val()) {
 
-                        return $('#divMensagemErroData').html('<p>Data inicial não pode ser maior que a data final.</p>').show();
-                    }
-                    else
-                    {
-                         $('#divMensagemErroData').hide();
-                    }
+                            return $('#divMensagemErroData').html('<p>Data inicial não pode ser maior que a data final.</p>').show();
+                        }
+                        else {
+                            $('#divMensagemErroData').hide();
+                        }
+                    }                   
+                },
+                'validaDataFinal': function ($el) {
+                    if ($('#dataFimVal').val() != '' && $('#dataIniVal').val() != '') {
+                        if ($('#dataIniVal').val() > $('#dataFimVal').val()) {
 
-                    if ($('#dataFimVal').val() > new Date().toLocaleDateString())
-                    {
-                        return $('#divMensagemErroData').html('<p>Data final não pode ser maior que a data atual.</p>').show();
-                    }
-                    else
-                    {
-                        $('#divMensagemErroData').hide();
+                            return $('#divMensagemErroData').html('<p>Data inicial não pode ser maior que a data final.</p>').show();
+                        }
+                        else {
+                            $('#divMensagemErroData').hide();
+                        }
                     }
                 }
             }
@@ -101,6 +104,20 @@
 
         $('#formDadosPessoa').on('invalid.bs.validator', function () {
             $('.btn-alterar-pessoa').prop("disabled", true);
+        });
+
+        $('#dataIniVal').change(function () {
+            if ($('#dataIniVal').val() == '') {
+                $('#divMensagemErroData').hide();
+                $('.btn-alterar-pessoa').prop("disabled", false);
+            }
+        });
+
+        $('#dataFimVal').change(function () {
+            if ($('#dataFimVal').val() == '') {
+                $('#divMensagemErroData').hide();
+                $('.btn-alterar-pessoa').prop("disabled", false);
+            }
         });
 
         $('#dataIniVal').mask('99/99/9999');
