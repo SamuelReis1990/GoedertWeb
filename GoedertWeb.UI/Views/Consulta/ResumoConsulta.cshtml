@@ -15,27 +15,38 @@
                                 }
                                 else
                                 {
-                                    <img src="@dadosPessoas.foto_string" width="150" height="150" alt="foto_@dadosPessoas.id_pessoa" />
+                                    <img src="@dadosPessoas.foto_string" width="200" height="200" alt="foto_@dadosPessoas.id_pessoa" />
                                 }
                             </div>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-primary btn-lg" onclick="ModalDetalhePessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">
+                            <button type="button" class="btn btn-success btn-lg" onclick="ModalDetalhePessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">
+                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                 <b class="text-center">@dadosPessoas.nome</b>
                             </button>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            Tipo de pessoa: @dadosPessoas.descricao
-                            <br />
-                            Documento:
+                        <td class="text-primary">
+                            <b>
+                                <i>
+                                    Tipo de pessoa: @dadosPessoas.descricao
+                                    <br />
+                                    Documento:
+                                </i>
+                            </b>
                         </td>
                     </tr>
                     <tr>
                         <td class="btn-group">
-                            <button type="button" class="btn btn-success" onclick="ModalAlteraPessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">Alterar</button>
-                            <button type="button" class="btn btn-danger" onclick="ModalRemoverPessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">Remover</button>
+                            <button type="button" class="btn btn-primary" onclick="ModalAlteraPessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                Alterar
+                            </button>
+                            <button type="button" class="btn btn-danger" onclick="ModalRemoverPessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                Remover
+                            </button>
                         </td>
                     </tr>
                 </table>
@@ -53,15 +64,23 @@ else
 <div id="modalPessoas" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" style="max-width:1000px; width:auto;">
         <div class="modal-content">
-            <div class="modal-header text-center">                
-                <h3><span class="modal-title text-center label label-info"></span></h3>
+            <div class="modal-header text-center">
+                <h3>
+                    <label class="modal-title text-center label label-primary"></label>
+                </h3>
             </div>
             <div class="modal-body modal-body-dados-pessoas" style="max-height:1000px; height:auto;">
             </div>
             <div class="modal-footer">
                 <div class="div-footer-modal-pessoa">
-                    <button type="button" class="btn btn-success btn-alterar-pessoa" style="display:none;" onclick="AlterarPessoa();">Alterar</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-success btn-alterar-pessoa" style="display:none;" onclick="AlterarPessoa();">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        Alterar
+                    </button>
+                    <button type="button" class="btn btn-default fecharModalPessoas" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        Fechar
+                    </button>
                 </div>
             </div>
         </div>
@@ -71,7 +90,7 @@ else
 <div id="modalRemoverPessoas" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header text-center">                
+            <div class="modal-header text-center">
                 <h3><span class="modal-title text-center label label-danger"></span></h3>
             </div>
             <div class="modal-body text-center text-danger">
@@ -79,8 +98,14 @@ else
             </div>
             <div class="modal-footer">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-danger" onclick="RemoverPessoa();">Sim</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+                    <button type="button" class="btn btn-danger" onclick="RemoverPessoa();">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        Sim
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        Não
+                    </button>
                 </div>
             </div>
         </div>
@@ -111,7 +136,7 @@ else
             })
         }).done(function (data, status) {
             $('.modal-body-dados-pessoas').html(data);
-            $('.modal-title').html('Detalhes de ' + $('#nomePessoaModal').val());
+            $('.modal-title').html('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Detalhes de ' + $('#nomePessoaModal').val());
             $('#modalPessoas').modal();
         }).fail(function (data, status) {
             $.notify('Erro ao abrir a modal de detalhe com os dados da pessoa desejada...', { clickToHide: true, autoHide: false });
@@ -120,9 +145,9 @@ else
 
     function ModalAlteraPessoa(id_pessoa, nome) {
         $('#idPessoaModal').val(id_pessoa);
-        $('#nomePessoaModal').val(nome);        
+        $('#nomePessoaModal').val(nome);
         $('.btn-alterar-pessoa').show();
-        $('.div-footer-modal-pessoa').addClass('btn-group');        
+        $('.div-footer-modal-pessoa').addClass('btn-group');
 
         $.ajax({
             url: '@Url.Action("TelaCrud", "Consulta")',
@@ -136,17 +161,17 @@ else
             })
         }).done(function (data, status) {
             $('.modal-body-dados-pessoas').html(data);
-            $('.modal-title').html('Alteração de ' + $('#nomePessoaModal').val());
+            $('.modal-title').html('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Alteração de ' + $('#nomePessoaModal').val());
             $('#modalPessoas').modal();
         }).fail(function (data, status) {
             $.notify('Erro ao abrir a modal de alteração com os dados da pessoa desejada...', { clickToHide: true, autoHide: false });
         });
     }
 
-    function ModalRemoverPessoa(id_pessoa, nome) {            
+    function ModalRemoverPessoa(id_pessoa, nome) {
         $('#idPessoaModal').val(id_pessoa);
         $('#nomePessoaModal').val(nome);
-        $('.modal-title').html('Exclusão de ' + $('#nomePessoaModal').val());
+        $('.modal-title').html('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Exclusão de ' + $('#nomePessoaModal').val());
         $('#modalRemoverPessoas').modal();
     }
 
@@ -178,9 +203,16 @@ else
             if (data.mensagemRetorno.includes('sucesso'))
                 {
                     $.notify(data.mensagemRetorno, { className: 'success', clickToHide: true, autoHide: false });
-                    $('.pararWebCam').trigger('click');
                     $('.modal-backdrop').remove();
-                    GetPessoas(data.nome);
+                    $('body').removeClass('modal-open');
+                    if ('@ViewBag.VIEW_CADASTRO' == 'N')
+                    {
+                        GetPessoas(data.nome);
+                    }
+                    else
+                    {
+                        GetPessoa($('#idPessoaModal').val());
+                    }
                 }
             else
                 {
@@ -200,9 +232,16 @@ else
             if (data.includes('sucesso'))
                 {
                     $.notify(data, { className: 'success', clickToHide: true, autoHide: false });
-                    $('.pararWebCam').trigger('click');
                     $('.modal-backdrop').remove();
-                    GetPessoas($('#nomePessoaModal').val());
+                    $('body').removeClass('modal-open');
+                    if ('@ViewBag.VIEW_CADASTRO' == 'N')
+                    {
+                        GetPessoas($('#nomePessoaModal').val());
+                    }
+                    else
+                    {
+                        location.reload();
+                    }
                 }
             else
                 {
@@ -238,7 +277,33 @@ else
         });
     }
 
-    function AbrirWebCam(idPessoa) {
+     function GetPessoa(idPessoa) {
+        $.ajax({
+            url: '@ViewBag.WEB_API/api/pessoas/' + idPessoa + '/listarPessoa',
+            method: 'GET',
+            dataType: 'json'
+        }).done(function (data, status) {
+            $.ajax({
+                url: '@Url.Action("ResumoConsulta", "Consulta")',
+                method: 'POST',
+                dataType: 'html',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'model': data,
+                    'viewCadastro': 'S'
+                })
+            }).done(function (data, status) {
+                $('#divResumoConsulta').html(data);
+                $('#divResumoConsulta').show();
+            }).fail(function (data, status) {
+                $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
+            });
+        }).fail(function (data, status) {
+            $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
+        });
+    }
+
+     function AbrirWebCam(idPessoa) {
         $.ajax({
             url: '@Url.Action("WebCam", "Consulta")',
             method: 'POST',
@@ -247,7 +312,8 @@ else
             data: JSON.stringify({
                 'acao': 'A',
                 'idPessoa': idPessoa,
-                'dadosPessoas': model
+                'dadosPessoas': model,
+                'viewCadastro': '@ViewBag.VIEW_CADASTRO'
             })
         }).done(function (data, status) {
             $('#divWebCam').html(data).show();

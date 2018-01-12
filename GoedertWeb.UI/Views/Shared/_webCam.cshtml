@@ -16,19 +16,37 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-md-6 text-left">
-                        <button id="tirarFoto" type="button" class="btn btn-primary" disabled="disabled" onclick="TirarFotos();">Tirar Foto</button>
+                        <button id="tirarFoto" type="button" class="btn btn-primary" disabled="disabled" onclick="TirarFotos();">
+                            <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+                            Tirar Foto
+                        </button>
                         <div class="btn-group">
-                            <button id="tirarNovamenteFoto" type="button" class="btn btn-primary" style="display:none;" onclick="TirarFotoNovamente();">Tirar outra foto</button>
+                            <button id="tirarNovamenteFoto" type="button" class="btn btn-primary" style="display:none;" onclick="TirarFotoNovamente();">
+                                <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+                                Tirar outra foto
+                            </button>
                             <div id="acaoImagem" class="btn-group" style="display:none;">
-                                <button id="salvarImagem" type="button" class="btn btn-success" onclick="AlterarImagem('I')">Salvar foto</button>
-                                <button id="alterarImagem" type="button" class="btn btn-success" onclick="AlterarImagem('A')">Alterar foto</button>
+                                <button id="salvarImagem" type="button" class="btn btn-success" onclick="AlterarImagem('I')">
+                                    <span class="glyphicon glyphicon-floppy-open" aria-hidden="true"></span>
+                                    Salvar foto
+                                </button>
+                                <button id="alterarImagem" type="button" class="btn btn-success" onclick="AlterarImagem('A')">
+                                    <span class="glyphicon glyphicon-floppy-open" aria-hidden="true"></span>
+                                    Alterar foto
+                                </button>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 text-right">
                         <div id="divRemover">
-                            <button id="removerImagem" type="button" class="btn btn-danger" disabled="disabled" onclick="AlterarImagem('R')">Remover foto</button>
-                            <button type="button" class="btn btn-default pararWebCam" data-dismiss="modal" disabled="disabled" >Fechar</button>
+                            <button id="removerImagem" type="button" class="btn btn-danger" disabled="disabled" onclick="AlterarImagem('R')">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                Remover foto
+                            </button>
+                            <button type="button" class="btn btn-default pararWebCam" data-dismiss="modal" disabled="disabled" >
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                Fechar
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -147,7 +165,14 @@
                     $.notify(data.mensagemRetorno, { className: 'success', clickToHide: true, autoHide: false });
                     $('.pararWebCam').trigger('click');
                     $('.modal-backdrop').remove();
-                    GetPessoas('@Html.Raw(Model.nome)');
+                    $('body').removeClass('modal-open');
+                    if ('@ViewBag.VIEW_CADASTRO' == 'N') {
+                        GetPessoasCam('@Html.Raw(Model.nome)');
+                    }
+                    else
+                    {
+                        GetPessoaCam('@Html.Raw(Model.id_pessoa)');
+                    }
                 }
                 else {
                     $.notify(data.mensagemRetorno, { clickToHide: true, autoHide: false });
@@ -163,7 +188,7 @@
         }
     }
 
-    function GetPessoas(nome) {
+    function GetPessoasCam(nome) {
         $.ajax({
             url: '@ViewBag.WEB_API/api/pessoas/' + nome + '/listarPessoas',
             method: 'GET',
@@ -178,8 +203,32 @@
                     'model': data
                 })
             }).done(function (data, status) {
-                $('#divResumoConsulta').html(data);
-                $('#divResumoConsulta').show();
+                $('#divResumoConsulta').html(data).show();
+            }).fail(function (data, status) {
+                $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
+            });
+        }).fail(function (data, status) {
+            $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
+        });
+    }
+
+    function GetPessoaCam(idPessoa) {
+        $.ajax({
+            url: '@ViewBag.WEB_API/api/pessoas/' + idPessoa + '/listarPessoa',
+            method: 'GET',
+            dataType: 'json'
+        }).done(function (data, status) {
+            $.ajax({
+                url: '@Url.Action("ResumoConsulta", "Consulta")',
+                method: 'POST',
+                dataType: 'html',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'model': data,
+                    'viewCadastro': 'S'
+                })
+            }).done(function (data, status) {
+                $('#divResumoConsulta').html(data).show();
             }).fail(function (data, status) {
                 $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
             });

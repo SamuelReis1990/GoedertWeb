@@ -222,9 +222,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Consulta\Index.cshtml" />
     <Content Include="Views\Cadastro\Index.cshtml" />
-    <Content Include="Views\Shared\_resumoConsulta.cshtml" />
     <Content Include="Views\Shared\_partialCrud.cshtml" />
     <Content Include="Views\Shared\_webCam.cshtml" />
+    <Content Include="Views\Consulta\ResumoConsulta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

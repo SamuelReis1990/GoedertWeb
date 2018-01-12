@@ -1,23 +1,43 @@
 ﻿<div class="jumbotron">
     <div class="row">
         <div class="col-md-4">
-            <h2><span class="label label-info">Pesquisar</span></h2>            
+            <h2>
+                <label class="label label-info">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    Pesquisar
+                </label>
+            </h2>
         </div>
     </div>
     <br />
     <div class="row">
         <div class="col-md-4 form-group">
-            <label for="pesquisarNome">Nome:</label>
-            <input id="pesquisarNome" type="text" class="form-control" placeholder="Digite o nome a buscar" value="">
-            <input id="idPessoa" type="hidden" value="">
+            <label for="pesquisarNome" class="control-label text-primary">Nome:</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </span>
+                <input id="pesquisarNome" type="text" class="form-control" placeholder="Digite o nome a buscar" value="">
+                <input id="idPessoa" type="hidden" value="">
+            </div>
         </div>
         <div class="col-md-4 form-group">
-            <label for="pesquisarDocumento">Documento:</label>
-            <input id="pesquisarDocumento" type="text" placeholder="Digite o número do documento" class="form-control">
+            <label for="pesquisarDocumento" class="control-label text-primary">Documento:</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </span>
+                <input id="pesquisarDocumento" type="text" placeholder="Digite o número do documento" class="form-control">
+            </div>
         </div>
         <div class="col-md-4 form-group">
-            <label for="pesquisarUnidade">Unidade:</label>
-            <input id="pesquisarUnidade" type="text" placeholder="Digite a unidade" class="form-control">
+            <label for="pesquisarUnidade" class="control-label text-primary">Unidade:</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </span>
+                <input id="pesquisarUnidade" type="text" placeholder="Digite a unidade" class="form-control">
+            </div>
         </div>
     </div>
 </div>
@@ -27,7 +47,7 @@
 
 @section scripts{
 
-<script>
+    <script>
 
     $(document).ready(function () {
 
@@ -41,7 +61,7 @@
                 response(data);
             }).fail(function (data, status) {
                 $.notify('Erro ao recuperar os dados para realizar o auto complete...', { clickToHide: true, autoHide: false });
-            });                                                   
+            });
         },
         minLength: 3,
         select: function (event, ui) {
@@ -75,6 +95,6 @@
 
 });
 
-</script>
+    </script>
 
 }

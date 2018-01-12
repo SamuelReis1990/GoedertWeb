@@ -1,6 +1,20 @@
 ﻿<div class="jumbotron">
     <div class="row">
-        <h2><span class="label label-info">Cadastrar</span></h2>
+        <h2>
+            <label class="label label-success">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                Cadastrar
+            </label>
+        </h2>
+    </div>
+</div>
+
+<div id="divBtnGravarNovaPessoa" class="row" style="display:none;">
+    <div class="col-md-12 text-center">
+        <button type="button" id="btnGravarNovaPessoa" class="btn btn-success btn-lg">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+            Incluir novamente
+        </button>
     </div>
 </div>
 
@@ -14,8 +28,14 @@
         <div class="col-md-12">
             <div class="text-center">
                 <div class="btn-group">
-                    <button type="button" id="btnGravarForm" onclick="GravarForm();" class="btn btn-success btn-lg" disabled="disabled">Gravar Dados</button>
-                    <button type="button" onclick="LimparForm();" class="btn btn-primary btn-lg">Limpar Dados</button>
+                    <button type="button" id="btnGravarForm" onclick="GravarForm();" class="btn btn-success btn-lg" disabled="disabled">
+                        <span class="glyphicon glyphicon-floppy-open" aria-hidden="true"></span>
+                        Gravar Dados
+                    </button>
+                    <button type="button" onclick="LimparForm();" class="btn btn-primary btn-lg">
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                        Limpar Dados
+                    </button>
                 </div>
             </div>
         </div>
@@ -30,7 +50,7 @@
 
 @section scripts{
 
-<script>
+    <script>
 
     $(document).ready(function () {
 
@@ -78,7 +98,6 @@
                 if (data.mensagemRetorno.includes('sucesso'))
                 {
                     $.notify(data.mensagemRetorno, { className: 'success', clickToHide: true, autoHide: false });
-                    LimparForm();
                     GetPessoa(data.idPessoa);
                 }
                 else
@@ -122,11 +141,13 @@
                 dataType: 'html',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
-                    'model': data
+                    'model': data,
+                    'viewCadastro': 'S'
                 })
             }).done(function (data, status) {
                 $('#divResumoConsulta').html(data).show();
                 $('#divCadastro').remove();
+                $('#divBtnGravarNovaPessoa').show();
             }).fail(function (data, status) {
                 $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
             });
@@ -135,6 +156,10 @@
         });
     }
 
-</script>
+    $('#btnGravarNovaPessoa').click(function () {
+        location.reload();
+    });
+
+    </script>
 
 }

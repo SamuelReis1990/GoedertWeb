@@ -17,9 +17,10 @@ namespace GoedertWeb.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult ResumoConsulta(List<DadosPessoas> model)
+        public ActionResult ResumoConsulta(List<DadosPessoas> model, string viewCadastro = "N")
         {
             ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
+            ViewBag.VIEW_CADASTRO = viewCadastro;
 
             model = model ?? new List<DadosPessoas>();
 
@@ -75,7 +76,7 @@ namespace GoedertWeb.UI.Controllers
                 }
             }
 
-           return PartialView("_resumoConsulta", model);
+           return PartialView(model);
         }
 
         [HttpPost]
@@ -90,10 +91,11 @@ namespace GoedertWeb.UI.Controllers
         }
         
         [HttpPost]
-        public ActionResult WebCam(string acao, string idPessoa, List<DadosPessoas> dadosPessoas)
+        public ActionResult WebCam(string acao, string idPessoa, List<DadosPessoas> dadosPessoas, string viewCadastro = "N")
         {
             ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
             ViewBag.ACAO = acao;
+            ViewBag.VIEW_CADASTRO = viewCadastro;
 
             var model = dadosPessoas.Where(t => t.id_pessoa == idPessoa).SingleOrDefault();
 
