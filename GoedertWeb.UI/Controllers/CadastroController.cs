@@ -9,13 +9,11 @@ namespace GoedertWeb.UI.Controllers
         // GET: Cadastro
         public ActionResult Index()
         {
-            ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
             return View();
         }
 
         public ActionResult TelaCrud(string acao)
         {
-            ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
             ViewBag.IND_ACAO = acao;
 
             DadosPessoas model = new DadosPessoas();
@@ -28,7 +26,6 @@ namespace GoedertWeb.UI.Controllers
 
         public ActionResult WebCam(string acao)
         {
-            ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
             ViewBag.ACAO = acao;
 
             DadosPessoas model = new DadosPessoas();

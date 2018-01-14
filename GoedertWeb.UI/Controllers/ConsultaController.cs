@@ -12,14 +12,12 @@ namespace GoedertWeb.UI.Controllers
         // GET: Consulta
         public ActionResult Index()
         {
-            ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
             return View();
         }
 
         [HttpPost]
         public ActionResult ResumoConsulta(List<DadosPessoas> model, string viewCadastro = "N")
         {
-            ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
             ViewBag.VIEW_CADASTRO = viewCadastro;
 
             model = model ?? new List<DadosPessoas>();
@@ -82,7 +80,6 @@ namespace GoedertWeb.UI.Controllers
         [HttpPost]
         public ActionResult TelaCrud(string acao, string idPessoa, List<DadosPessoas> dadosPessoas)
         {
-            ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
             ViewBag.IND_ACAO = acao;
 
             var model = dadosPessoas.Where(t => t.id_pessoa == idPessoa).SingleOrDefault();
@@ -93,7 +90,6 @@ namespace GoedertWeb.UI.Controllers
         [HttpPost]
         public ActionResult WebCam(string acao, string idPessoa, List<DadosPessoas> dadosPessoas, string viewCadastro = "N")
         {
-            ViewBag.WEB_API = WebConfigurationManager.AppSettings["WEB_API"];
             ViewBag.ACAO = acao;
             ViewBag.VIEW_CADASTRO = viewCadastro;
 

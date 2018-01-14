@@ -149,7 +149,7 @@
             }
 
             $.ajax({
-                url: '@ViewBag.WEB_API/api/pessoas/@Html.Raw(Model.id_pessoa)/atualizarPessoas',
+                url: '@Session["WEB_API"].ToString()/api/pessoas/@Html.Raw(Model.id_pessoa)/atualizarPessoas',
                 method: 'POST',
                 dataType: 'json',
                 data: {
@@ -167,11 +167,11 @@
                     $('.modal-backdrop').remove();
                     $('body').removeClass('modal-open');
                     if ('@ViewBag.VIEW_CADASTRO' == 'N') {
-                        GetPessoasCam('@Html.Raw(Model.nome)');
+                        GetPessoas('@Html.Raw(Model.nome)');
                     }
                     else
                     {
-                        GetPessoaCam('@Html.Raw(Model.id_pessoa)');
+                        GetPessoa('@Html.Raw(Model.id_pessoa)');
                     }
                 }
                 else {
@@ -186,55 +186,6 @@
                 }
             });
         }
-    }
-
-    function GetPessoasCam(nome) {
-        $.ajax({
-            url: '@ViewBag.WEB_API/api/pessoas/' + nome + '/listarPessoas',
-            method: 'GET',
-            dataType: 'json'
-        }).done(function (data, status) {
-            $.ajax({
-                url: '@Url.Action("ResumoConsulta", "Consulta")',
-                method: 'POST',
-                dataType: 'html',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({
-                    'model': data
-                })
-            }).done(function (data, status) {
-                $('#divResumoConsulta').html(data).show();
-            }).fail(function (data, status) {
-                $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
-            });
-        }).fail(function (data, status) {
-            $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
-        });
-    }
-
-    function GetPessoaCam(idPessoa) {
-        $.ajax({
-            url: '@ViewBag.WEB_API/api/pessoas/' + idPessoa + '/listarPessoa',
-            method: 'GET',
-            dataType: 'json'
-        }).done(function (data, status) {
-            $.ajax({
-                url: '@Url.Action("ResumoConsulta", "Consulta")',
-                method: 'POST',
-                dataType: 'html',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({
-                    'model': data,
-                    'viewCadastro': 'S'
-                })
-            }).done(function (data, status) {
-                $('#divResumoConsulta').html(data).show();
-            }).fail(function (data, status) {
-                $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
-            });
-        }).fail(function (data, status) {
-            $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
-        });
-    }
+    } 
 
 </script>

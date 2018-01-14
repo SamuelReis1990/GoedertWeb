@@ -50,7 +50,7 @@
 
 @section scripts{
 
-    <script>
+<script>
 
     $(document).ready(function () {
 
@@ -90,7 +90,7 @@
                 });
 
             $.ajax({
-                url: '@ViewBag.WEB_API/api/pessoas/cadastrarPessoas',
+                url: '@Session["WEB_API"].ToString()/api/pessoas/cadastrarPessoas',
                 method: 'POST',
                 dataType: 'json',
                 data: formPessoaJson
@@ -98,7 +98,7 @@
                 if (data.mensagemRetorno.includes('sucesso'))
                 {
                     $.notify(data.mensagemRetorno, { className: 'success', clickToHide: true, autoHide: false });
-                    GetPessoa(data.idPessoa);
+                    GetPessoaCadastro(data.idPessoa);
                 }
                 else
                 {
@@ -129,12 +129,18 @@
         });
     }
 
-    function GetPessoa(idPessoa) {
+    function GetPessoaCadastro(idPessoa) {
         $.ajax({
-            url: '@ViewBag.WEB_API/api/pessoas/' + idPessoa + '/listarPessoa',
+            url: '@Session["WEB_API"].ToString()/api/pessoas/' + idPessoa + '/listarPessoa',
             method: 'GET',
             dataType: 'json'
         }).done(function (data, status) {
+            $.each(data, function (i, item) {
+                var dadosDocumentos = GetDocumento(item.id_pessoa);
+                dadosDocumentos = { dadosDocumentos: [dadosDocumentos] };
+                data[i] = $.extend(dadosDocumentos, data[i]);
+            });
+
             $.ajax({
                 url: '@Url.Action("ResumoConsulta", "Consulta")',
                 method: 'POST',
@@ -160,6 +166,6 @@
         location.reload();
     });
 
-    </script>
+</script>
 
 }

@@ -195,7 +195,7 @@ else
             });
 
         $.ajax({
-            url: '@ViewBag.WEB_API/api/pessoas/' + $('#idPessoaModal').val() + '/atualizarPessoas',
+            url: '@Session["WEB_API"].ToString()/api/pessoas/' + $('#idPessoaModal').val() + '/atualizarPessoas',
             method: 'POST',
             dataType: 'json',
             data: formPessoaJson
@@ -225,7 +225,7 @@ else
 
     function RemoverPessoa() {
         $.ajax({
-            url: '@ViewBag.WEB_API/api/pessoas/' + $('#idPessoaModal').val() + '/removerPessoas',
+            url: '@Session["WEB_API"].ToString()/api/pessoas/' + $('#idPessoaModal').val() + '/removerPessoas',
             method: 'POST',
             dataType: 'json'
         }).done(function (data, status) {
@@ -249,57 +249,6 @@ else
                 }
         }).fail(function (data, status) {
             $.notify('Erro ao remover a pessoa desejada...', { clickToHide: true, autoHide: false });
-        });
-    }
-
-    function GetPessoas(nome) {
-        $.ajax({
-            url: '@ViewBag.WEB_API/api/pessoas/' + nome + '/listarPessoas',
-            method: 'GET',
-            dataType: 'json'
-        }).done(function (data, status) {
-            $.ajax({
-                url: '@Url.Action("ResumoConsulta", "Consulta")',
-                method: 'POST',
-                dataType: 'html',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({
-                    'model': data
-                })
-            }).done(function (data, status) {
-                $('#divResumoConsulta').html(data);
-                $('#divResumoConsulta').show();
-            }).fail(function (data, status) {
-                $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
-            });
-        }).fail(function (data, status) {
-            $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
-        });
-    }
-
-     function GetPessoa(idPessoa) {
-        $.ajax({
-            url: '@ViewBag.WEB_API/api/pessoas/' + idPessoa + '/listarPessoa',
-            method: 'GET',
-            dataType: 'json'
-        }).done(function (data, status) {
-            $.ajax({
-                url: '@Url.Action("ResumoConsulta", "Consulta")',
-                method: 'POST',
-                dataType: 'html',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({
-                    'model': data,
-                    'viewCadastro': 'S'
-                })
-            }).done(function (data, status) {
-                $('#divResumoConsulta').html(data);
-                $('#divResumoConsulta').show();
-            }).fail(function (data, status) {
-                $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
-            });
-        }).fail(function (data, status) {
-            $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
         });
     }
 

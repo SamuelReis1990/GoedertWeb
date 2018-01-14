@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace GoedertWeb.UI.Models
 {
@@ -16,5 +13,6 @@ namespace GoedertWeb.UI.Models
         public string dt_fim_val { get; set; }
         public string descricao { get; set; }
         public string foto_string { get; set; }
+        public List<DadosDocumentos> dadosDocumentos { get; set; }
     }
 }

@@ -17,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>                
+                </button>
                 @Html.ActionLink("Home", "Index", "Consulta", new { area = "" }, new { @class = "navbar-brand glyphicon glyphicon-home" })
             </div>
             <div class="navbar-collapse collapse">
@@ -42,7 +42,82 @@
             </div>
         </div>
     </div>
+    <script>
 
+        function GetPessoa(idPessoa) {
+            $.ajax({
+                url: '@Session["WEB_API"].ToString()/api/pessoas/' + idPessoa + '/listarPessoa',
+                method: 'GET',
+                dataType: 'json'
+            }).done(function (data, status) {
+                $.each(data, function (i, item) {
+                    var dadosDocumentos = GetDocumento(item.id_pessoa);
+                    dadosDocumentos = { dadosDocumentos: [dadosDocumentos] };
+                    data[i] = $.extend(dadosDocumentos, data[i]);
+                });
+
+                $.ajax({
+                    url: '@Url.Action("ResumoConsulta", "Consulta")',
+                    method: 'POST',
+                    dataType: 'html',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'model': data,
+                        'viewCadastro': 'S'
+                    })
+                }).done(function (data, status) {
+                    $('#divResumoConsulta').html(data).show();
+                }).fail(function (data, status) {
+                    $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
+                });
+            }).fail(function (data, status) {
+                $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
+            });
+        }
+
+        function GetPessoas(nome) {
+            $.ajax({
+                url: '@Session["WEB_API"].ToString()/api/pessoas/' + nome + '/listarPessoas',
+                method: 'GET',
+                dataType: 'json'
+            }).done(function (data, status) {
+                $.each(data, function (i, item) {
+                    var dadosDocumentos = GetDocumento(item.id_pessoa);
+                    dadosDocumentos = { dadosDocumentos: [dadosDocumentos] };
+                    data[i] = $.extend(dadosDocumentos, data[i]);
+                });
+
+                $.ajax({
+                    url: '@Url.Action("ResumoConsulta", "Consulta")',
+                    method: 'POST',
+                    dataType: 'html',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'model': data
+                    })
+                }).done(function (data, status) {
+                    $('#divResumoConsulta').html(data).show();
+                }).fail(function (data, status) {
+                    $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
+                });
+            }).fail(function (data, status) {
+                $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
+            });
+        }
+
+        function GetDocumento(idPessoa) {
+            return $.ajax({
+                url: '@Session["WEB_API"].ToString()/api/documentos/' + idPessoa + '/listarDocumento',
+                method: 'GET',
+                dataType: 'json',
+                async: false
+            }).done(function (data, status) {
+            }).fail(function (data, status) {
+                $.notify('Erro ao recuperar a pessoa...', { clickToHide: true, autoHide: false });
+            }).responseJSON[0];
+        }
+
+    </script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

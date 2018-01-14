@@ -47,14 +47,14 @@
 
 @section scripts{
 
-    <script>
+<script>
 
     $(document).ready(function () {
 
     $('#pesquisarNome').autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: '@ViewBag.WEB_API/api/pessoas/' + request.term + '/autoCompletePessoas',
+                url: '@Session["WEB_API"].ToString()/api/pessoas/' + request.term + '/autoCompletePessoas',
                 method: 'GET',
                 dataType: 'json'
             }).done(function (data, status) {
@@ -69,13 +69,37 @@
         }
     });
 
-    function GetPessoas(nome) {
+    $('#pesquisarDocumento').autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Session["WEB_API"].ToString()/api/documentos/' + request.term + '/autoCompleteDocumentos',
+                method: 'GET',
+                dataType: 'json'
+            }).done(function (data, status) {
+                response(data);
+            }).fail(function (data, status) {
+                $.notify('Erro ao recuperar os dados para realizar o auto complete...', { clickToHide: true, autoHide: false });
+            });
+        },
+        minLength: 3,
+        select: function (event, ui) {
+            GetDocumentos(ui.item.label);
+        }
+    });   
+
+    function GetDocumentos(numero) {
         $.ajax({
-            url: '@ViewBag.WEB_API/api/pessoas/' + nome + '/listarPessoas',
+            url: '@Session["WEB_API"].ToString()/api/documentos/' + numero + '/listarDocumentos',
             method: 'GET',
             dataType: 'json'
         }).done(function (data, status) {
-            $.ajax({
+            $.each(data, function (i, item) {
+                   var dadosPessoas = GetDadosPessoa(item.id_pessoa);
+                   data[i] = { dadosDocumentos: [data[i]] };
+                   data[i] = $.extend(dadosPessoas, data[i]);
+            });
+
+             $.ajax({
                 url: '@Url.Action("ResumoConsulta", "Consulta")',
                 method: 'POST',
                 dataType: 'html',
@@ -88,13 +112,25 @@
             }).fail(function (data, status) {
                 $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
             });
+
         }).fail(function (data, status) {
-            $.notify('Erro ao recuperar a pessoa desejada...', { clickToHide: true, autoHide: false });
+            $.notify('Erro ao recuperar os documentos...', { clickToHide: true, autoHide: false });
         });
     }
 
+    function GetDadosPessoa(idPessoa) {
+        return $.ajax({
+            url: '@Session["WEB_API"].ToString()/api/pessoas/' + idPessoa + '/listarPessoa',
+            method: 'GET',
+            dataType: 'json',
+            async: false
+        }).done(function (data, status) {
+        }).fail(function (data, status) {
+            $.notify('Erro ao recuperar a pessoa...', { clickToHide: true, autoHide: false });
+        }).responseJSON[0];
+    }    
 });
 
-    </script>
+</script>
 
 }
