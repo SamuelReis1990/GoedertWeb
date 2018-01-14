@@ -19,7 +19,7 @@ namespace GoedertWeb.UI
 
         protected void Session_Start(object sender, EventArgs e)
         {
-            HttpContext.Current.Session["WEB_API"] = WebConfigurationManager.AppSettings["WEB_API"];
+            Session["WEB_API"] = WebConfigurationManager.AppSettings["WEB_API"];
         }
     }
 }
