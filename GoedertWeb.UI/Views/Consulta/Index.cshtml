@@ -94,9 +94,10 @@
             dataType: 'json'
         }).done(function (data, status) {
             $.each(data, function (i, item) {
-                   var dadosPessoas = GetDadosPessoa(item.id_pessoa);
-                   data[i] = { dadosDocumentos: [data[i]] };
-                   data[i] = $.extend(dadosPessoas, data[i]);
+                var dadosPessoas = GetDadosPessoa(item.id_pessoa);
+                var dadosDocumentos = GetDocumento(item.id_pessoa);
+                dadosDocumentos = { dadosDocumentos: dadosDocumentos };
+                data[i] = $.extend(dadosDocumentos, dadosPessoas);
             });
 
              $.ajax({

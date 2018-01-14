@@ -137,7 +137,7 @@
         }).done(function (data, status) {
             $.each(data, function (i, item) {
                 var dadosDocumentos = GetDocumento(item.id_pessoa);
-                dadosDocumentos = { dadosDocumentos: [dadosDocumentos] };
+                dadosDocumentos = { dadosDocumentos: dadosDocumentos };
                 data[i] = $.extend(dadosDocumentos, data[i]);
             });
 
