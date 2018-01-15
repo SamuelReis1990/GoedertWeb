@@ -38,6 +38,7 @@
                                     {
                                         @dadosDocumentos.descricao
                                         <br />
+                                        <input type="hidden" id="numeroDocumento" value="@dadosDocumentos.numero" />
                                     }
                                 </i>
                             </b>
@@ -213,7 +214,14 @@ else
                     $('body').removeClass('modal-open');
                     if ('@ViewBag.VIEW_CADASTRO' == 'N')
                     {
-                        GetPessoas(data.nome);
+                        if ('@ViewBag.TIPO_PESQUISA' == 'N')
+                        {
+                            GetPessoas(data.nome);
+                        }
+                        else if('@ViewBag.TIPO_PESQUISA' == 'D')
+                        {
+                            GetDocumentos($('#numeroDocumento').val());
+                        }
                     }
                     else
                     {
@@ -242,7 +250,14 @@ else
                     $('body').removeClass('modal-open');
                     if ('@ViewBag.VIEW_CADASTRO' == 'N')
                     {
-                        GetPessoas($('#nomePessoaModal').val());
+                        if ('@ViewBag.TIPO_PESQUISA' == 'N')
+                        {
+                            GetPessoas($('#nomePessoaModal').val());
+                        }
+                        else if('@ViewBag.TIPO_PESQUISA' == 'D')
+                        {
+                            GetDocumentos($('#numeroDocumento').val());
+                        }                        
                     }
                     else
                     {
@@ -268,7 +283,8 @@ else
                 'acao': 'A',
                 'idPessoa': idPessoa,
                 'dadosPessoas': model,
-                'viewCadastro': '@ViewBag.VIEW_CADASTRO'
+                'viewCadastro': '@ViewBag.VIEW_CADASTRO',
+                'tipoPesquisa': '@ViewBag.TIPO_PESQUISA'
             })
         }).done(function (data, status) {
             $('#divWebCam').html(data).show();

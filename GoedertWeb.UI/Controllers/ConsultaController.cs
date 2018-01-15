@@ -16,9 +16,10 @@ namespace GoedertWeb.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult ResumoConsulta(List<DadosPessoas> model, string viewCadastro = "N")
+        public ActionResult ResumoConsulta(List<DadosPessoas> model, string viewCadastro = "N", string tipoPesquisa = "")
         {
             ViewBag.VIEW_CADASTRO = viewCadastro;
+            ViewBag.TIPO_PESQUISA = tipoPesquisa;
 
             model = model ?? new List<DadosPessoas>();            
 
@@ -88,10 +89,11 @@ namespace GoedertWeb.UI.Controllers
         }
         
         [HttpPost]
-        public ActionResult WebCam(string acao, string idPessoa, List<DadosPessoas> dadosPessoas, string viewCadastro = "N")
+        public ActionResult WebCam(string acao, string idPessoa, List<DadosPessoas> dadosPessoas, string viewCadastro = "N", string tipoPesquisa = "")
         {
             ViewBag.ACAO = acao;
             ViewBag.VIEW_CADASTRO = viewCadastro;
+            ViewBag.TIPO_PESQUISA = tipoPesquisa;
 
             var model = dadosPessoas.Where(t => t.id_pessoa == idPessoa).SingleOrDefault();
 

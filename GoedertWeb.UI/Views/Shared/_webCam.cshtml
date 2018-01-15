@@ -43,7 +43,7 @@
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                 Remover foto
                             </button>
-                            <button type="button" class="btn btn-default pararWebCam" data-dismiss="modal" disabled="disabled" >
+                            <button type="button" class="btn btn-default pararWebCam" data-dismiss="modal" disabled="disabled">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 Fechar
                             </button>
@@ -54,6 +54,10 @@
         </div>
     </div>
 </div>
+@foreach (var dadosDocumentos in Model.dadosDocumentos)
+{
+    <input type="hidden" id="numeroDocumento" value="@dadosDocumentos.numero" />
+}
 
 <script>
 
@@ -167,7 +171,14 @@
                     $('.modal-backdrop').remove();
                     $('body').removeClass('modal-open');
                     if ('@ViewBag.VIEW_CADASTRO' == 'N') {
-                        GetPessoas('@Html.Raw(Model.nome)');
+                        if ('@ViewBag.TIPO_PESQUISA' == 'N')
+                        {
+                            GetPessoas('@Html.Raw(Model.nome)');
+                        }
+                        else if('@ViewBag.TIPO_PESQUISA' == 'D')
+                        {
+                            GetDocumentos($('#numeroDocumento').val());
+                        }
                     }
                     else
                     {
@@ -186,6 +197,6 @@
                 }
             });
         }
-    } 
+    }
 
 </script>

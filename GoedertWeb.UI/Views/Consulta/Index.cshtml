@@ -51,98 +51,43 @@
 
     $(document).ready(function () {
 
-    $('#pesquisarNome').autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: '@Session["WEB_API"].ToString()/api/pessoas/' + request.term + '/autoCompletePessoas',
-                method: 'GET',
-                dataType: 'json'
-            }).done(function (data, status) {
-                response(data);
-            }).fail(function (data, status) {
-                $.notify('Erro ao recuperar os dados para realizar o auto complete...', { clickToHide: true, autoHide: false });
-            });
-        },
-        minLength: 3,
-        select: function (event, ui) {
-            GetPessoas(ui.item.label);
-        }
-    });
-
-    $('#pesquisarDocumento').autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: '@Session["WEB_API"].ToString()/api/documentos/' + request.term + '/autoCompleteDocumentos',
-                method: 'GET',
-                dataType: 'json'
-            }).done(function (data, status) {
-                response(data);
-            }).fail(function (data, status) {
-                $.notify('Erro ao recuperar os dados para realizar o auto complete...', { clickToHide: true, autoHide: false });
-            });
-        },
-        minLength: 3,
-        select: function (event, ui) {
-            GetDocumentos(ui.item.label);
-        }
-    });   
-
-    function GetDocumentos(numero) {
-        $.ajax({
-            url: '@Session["WEB_API"].ToString()/api/documentos/' + numero + '/listarDocumentos',
-            method: 'GET',
-            dataType: 'json'
-        }).done(function (data, status) {
-            $.each(data, function (i, item) {
-                var dadosPessoas = GetDadosPessoa(item.id_pessoa);
-                var dadosTipoPessoa = GetTipoPessoa(dadosPessoas.id_tipo_pessoa);
-                dadosPessoas = $.extend(dadosPessoas, { descricao: dadosTipoPessoa.descricao });
-
-                var dadosDocumentos = GetDocumento(item.id_pessoa);
-
-                if (dadosDocumentos.length > 0) {
-                    var dadosTipoDocumento = {};
-                    $.each(dadosDocumentos, function (idx, item) {
-                        dadosTipoDocumento = GetTipoDocumento(item.id_tipo_documento);
-                        dadosDocumentos[idx] = $.extend(dadosDocumentos[idx], { descricao: dadosTipoDocumento.descricao });
-                    });
-                }
-
-                dadosDocumentos = { dadosDocumentos: dadosDocumentos };
-                data[i] = $.extend(dadosDocumentos, dadosPessoas);
-            });
-
-             $.ajax({
-                url: '@Url.Action("ResumoConsulta", "Consulta")',
-                method: 'POST',
-                dataType: 'html',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({
-                    'model': data
-                })
-            }).done(function (data, status) {
-                $('#divResumoConsulta').html(data).show();
-            }).fail(function (data, status) {
-                $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
-            });
-
-        }).fail(function (data, status) {
-            $.notify('Erro ao recuperar os documentos...', { clickToHide: true, autoHide: false });
+        $('#pesquisarNome').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Session["WEB_API"].ToString()/api/pessoas/' + request.term + '/autoCompletePessoas',
+                    method: 'GET',
+                    dataType: 'json'
+                }).done(function (data, status) {
+                    response(data);
+                }).fail(function (data, status) {
+                    $.notify('Erro ao recuperar os dados para realizar o auto complete...', { clickToHide: true, autoHide: false });
+                });
+            },
+            minLength: 3,
+            select: function (event, ui) {
+                GetPessoas(ui.item.label);
+            }
         });
-    }
 
-    function GetDadosPessoa(idPessoa) {
-        return $.ajax({
-            url: '@Session["WEB_API"].ToString()/api/pessoas/' + idPessoa + '/listarPessoa',
-            method: 'GET',
-            dataType: 'json',
-            async: false
-        }).done(function (data, status) {
-        }).fail(function (data, status) {
-            $.notify('Erro ao recuperar a pessoa...', { clickToHide: true, autoHide: false });
-        }).responseJSON[0];
-    }    
-});
+        $('#pesquisarDocumento').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Session["WEB_API"].ToString()/api/documentos/' + request.term + '/autoCompleteDocumentos',
+                    method: 'GET',
+                    dataType: 'json'
+                }).done(function (data, status) {
+                    response(data);
+                }).fail(function (data, status) {
+                    $.notify('Erro ao recuperar os dados para realizar o auto complete...', { clickToHide: true, autoHide: false });
+                });
+            },
+            minLength: 3,
+            select: function (event, ui) {
+                GetDocumentos(ui.item.label);
+            }
+        });
+
+    });
 
 </script>
 
