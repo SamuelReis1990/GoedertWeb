@@ -20,28 +20,12 @@ namespace GoedertWeb.UI.Controllers
         {
             ViewBag.VIEW_CADASTRO = viewCadastro;
 
-            model = model ?? new List<DadosPessoas>();
+            model = model ?? new List<DadosPessoas>();            
 
             if (model.Count > 0)
             {
                 foreach (var dadosPessoa in model)
-                {
-                    switch (dadosPessoa.id_tipo_pessoa)
-                    {
-                        case "2":
-                            dadosPessoa.descricao = "Funcionário";
-                            break;
-                        case "3":
-                            dadosPessoa.descricao = "Prestador de Serviço";
-                            break;
-                        case "4":
-                            dadosPessoa.descricao = "Visitante";
-                            break;
-                        default:
-                            dadosPessoa.descricao = "Morador";
-                            break;
-                    }
-
+                {                    
                     if (dadosPessoa.foto != null)
                     {
                         var imagem = Convert.ToBase64String(dadosPessoa.foto);
@@ -70,6 +54,22 @@ namespace GoedertWeb.UI.Controllers
                         dadosPessoa.dt_fim_val = dadosPessoa.dt_fim_val.Replace("T00:00:00", "");
                         string[] dt_fim_val = dadosPessoa.dt_fim_val.Split('-');
                         dadosPessoa.dt_fim_val = dt_fim_val[2] + '/' + dt_fim_val[1] + '/' + dt_fim_val[0];
+                    }
+
+                    if (dadosPessoa.dadosDocumentos.Count > 0)
+                    {
+                        foreach (var dadosDocumento in dadosPessoa.dadosDocumentos)
+                        {
+                            if (!String.IsNullOrEmpty(dadosDocumento.numero) && !String.IsNullOrEmpty(dadosDocumento.descricao))
+                            {
+                                dadosDocumento.descricao += " " + dadosDocumento.numero;
+                            }
+                            else
+                            {
+                                dadosDocumento.descricao = "";
+                                dadosDocumento.numero = "";
+                            }
+                        }
                     }
                 }
             }

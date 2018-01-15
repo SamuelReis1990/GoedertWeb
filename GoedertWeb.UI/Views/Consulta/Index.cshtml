@@ -95,7 +95,19 @@
         }).done(function (data, status) {
             $.each(data, function (i, item) {
                 var dadosPessoas = GetDadosPessoa(item.id_pessoa);
+                var dadosTipoPessoa = GetTipoPessoa(dadosPessoas.id_tipo_pessoa);
+                dadosPessoas = $.extend(dadosPessoas, { descricao: dadosTipoPessoa.descricao });
+
                 var dadosDocumentos = GetDocumento(item.id_pessoa);
+
+                if (dadosDocumentos.length > 0) {
+                    var dadosTipoDocumento = {};
+                    $.each(dadosDocumentos, function (idx, item) {
+                        dadosTipoDocumento = GetTipoDocumento(item.id_tipo_documento);
+                        dadosDocumentos[idx] = $.extend(dadosDocumentos[idx], { descricao: dadosTipoDocumento.descricao });
+                    });
+                }
+
                 dadosDocumentos = { dadosDocumentos: dadosDocumentos };
                 data[i] = $.extend(dadosDocumentos, dadosPessoas);
             });

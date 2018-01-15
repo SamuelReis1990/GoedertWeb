@@ -142,14 +142,14 @@
 
         $('#sexo').val('@Model.sexo');
 
-        GetTipoPessoa();
+        GetTiposPessoas();
 
-        function GetTipoPessoa() {
+        function GetTiposPessoas() {
 
             $('#tipoPessoaForm').empty();
 
             $.ajax({
-                url: '@Session["WEB_API"].ToString()/api/pessoas/listarTipoPessoa',
+                url: '@Session["WEB_API"].ToString()/api/pessoas/listarTiposPessoas',
                 method: 'GET',
                 dataType: 'json'
             }).done(function (data, status) {

@@ -50,11 +50,7 @@
                 method: 'GET',
                 dataType: 'json'
             }).done(function (data, status) {
-                $.each(data, function (i, item) {
-                    var dadosDocumentos = GetDocumento(item.id_pessoa);
-                    dadosDocumentos = { dadosDocumentos: dadosDocumentos };
-                    data[i] = $.extend(dadosDocumentos, data[i]);
-                });
+                data = TrataJson(data);
 
                 $.ajax({
                     url: '@Url.Action("ResumoConsulta", "Consulta")',
@@ -67,6 +63,8 @@
                     })
                 }).done(function (data, status) {
                     $('#divResumoConsulta').html(data).show();
+                    $('#divCadastro').remove();
+                    $('#divBtnGravarNovaPessoa').show();
                 }).fail(function (data, status) {
                     $.notify('Erro ao abrir a tela para listar a pessoa desejada...', { clickToHide: true, autoHide: false });
                 });
@@ -81,11 +79,7 @@
                 method: 'GET',
                 dataType: 'json'
             }).done(function (data, status) {
-                $.each(data, function (i, item) {
-                    var dadosDocumentos = GetDocumento(item.id_pessoa);
-                    dadosDocumentos = { dadosDocumentos: dadosDocumentos };
-                    data[i] = $.extend(dadosDocumentos, data[i]);
-                });
+                data = TrataJson(data);
 
                 $.ajax({
                     url: '@Url.Action("ResumoConsulta", "Consulta")',
@@ -105,6 +99,25 @@
             });
         }
 
+        function TrataJson(data) {
+            return $.each(data, function (i, item) {
+                var dadosTipoPessoa = GetTipoPessoa(item.id_tipo_pessoa);
+                data[i] = $.extend(data[i], { descricao: dadosTipoPessoa.descricao });
+
+                var dadosDocumentos = GetDocumento(item.id_pessoa);
+                if (dadosDocumentos.length > 0) {
+                    var dadosTipoDocumento = {};
+                    $.each(dadosDocumentos, function (idx, item) {
+                        dadosTipoDocumento = GetTipoDocumento(item.id_tipo_documento);
+                        dadosDocumentos[idx] = $.extend(dadosDocumentos[idx], { descricao: dadosTipoDocumento.descricao });
+                    });
+                }
+
+                dadosDocumentos = { dadosDocumentos: dadosDocumentos };
+                data[i] = $.extend(dadosDocumentos, data[i]);
+            });
+        }
+
         function GetDocumento(idPessoa) {
             return $.ajax({
                 url: '@Session["WEB_API"].ToString()/api/documentos/' + idPessoa + '/listarDocumento',
@@ -115,6 +128,30 @@
             }).fail(function (data, status) {
                 $.notify('Erro ao recuperar o documento...', { clickToHide: true, autoHide: false });
             }).responseJSON;
+        }
+
+        function GetTipoPessoa(idTipoPessoa) {
+            return $.ajax({
+                url: '@Session["WEB_API"].ToString()/api/pessoas/' + idTipoPessoa + '/listarTipoPessoa',
+                method: 'GET',
+                dataType: 'json',
+                async: false
+            }).done(function (data, status) {
+            }).fail(function (data, status) {
+                $.notify('Erro ao recuperar o tipo de pessoa...', { clickToHide: true, autoHide: false });
+            }).responseJSON[0];
+        }
+
+        function GetTipoDocumento(idTipoDocumento) {
+            return $.ajax({
+                url: '@Session["WEB_API"].ToString()/api/documentos/' + idTipoDocumento + '/listarTipoDocumento',
+                method: 'GET',
+                dataType: 'json',
+                async: false
+            }).done(function (data, status) {
+            }).fail(function (data, status) {
+                $.notify('Erro ao recuperar o tipo de documento...', { clickToHide: true, autoHide: false });
+            }).responseJSON[0];
         }
 
     </script>

@@ -9,5 +9,6 @@
         public string emissor { get; set; }
         public string dt_validade { get; set; }
         public string dt_emissao { get; set; }
+        public string descricao { get; set; }
     }
 }

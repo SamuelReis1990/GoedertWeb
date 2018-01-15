@@ -4,6 +4,11 @@ namespace GoedertWeb.UI.Models
 {
     public class DadosPessoas
     {
+        public DadosPessoas()
+        {
+            dadosDocumentos = new List<DadosDocumentos>();
+        }
+
         public string id_pessoa { get; set; }
         public string id_tipo_pessoa { get; set; }
         public string nome { get; set; }

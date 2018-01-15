@@ -32,7 +32,13 @@
                                 <i>
                                     Tipo de pessoa: @dadosPessoas.descricao
                                     <br />
-                                    Documento:
+                                    Documentação:
+                                    <br />
+                                    @foreach (var dadosDocumentos in dadosPessoas.dadosDocumentos)
+                                    {
+                                        @dadosDocumentos.descricao
+                                        <br />
+                                    }
                                 </i>
                             </b>
                         </td>
