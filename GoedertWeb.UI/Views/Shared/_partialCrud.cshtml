@@ -70,14 +70,18 @@
 
 <script>
 
-    $(document).ready(function () {
+    $(document).ready(function () {        
 
-        $('#formDadosPessoa').validator({
+        $('#formDadosPessoa').validator({            
             custom: {
                 'validaDataInicial': function ($el) {
                     if ($('#dataIniVal').val() != '' && $('#dataFimVal').val() != '') {
-                        if ($('#dataIniVal').val() > $('#dataFimVal').val()) {
+                        var dtIni = $('#dataIniVal').val().split("/");
+                        var dtFim = $('#dataFimVal').val().split("/");
+                        dtIni = new Date(dtIni[1] + "/" + dtIni[0] + "/" + dtIni[2]);
+                        dtFim = new Date(dtFim[1] + "/" + dtFim[0] + "/" + dtFim[2]);
 
+                        if (dtIni > dtFim) {
                             return $('#divMensagemErroData').html('<p>Data inicial não pode ser maior que a data final.</p>').show();
                         }
                         else {
@@ -86,8 +90,14 @@
                     }
                 },
                 'validaDataFinal': function ($el) {
-                    if ($('#dataFimVal').val() != '' && $('#dataIniVal').val() != '') {
-                        if ($('#dataIniVal').val() > $('#dataFimVal').val()) {
+                    if ($('#dataFimVal').val() != '' && $('#dataIniVal').val() != '') {  
+
+                        var datIni = $('#dataIniVal').val().split("/");
+                        var datFim = $('#dataFimVal').val().split("/");
+                        datIni = new Date(datIni[1] + "/" + datIni[0] + "/" + datIni[2]);
+                        datFim = new Date(datFim[1] + "/" + datFim[0] + "/" + datFim[2]);
+                        
+                        if (datIni > datFim) {
 
                             return $('#divMensagemErroData').html('<p>Data inicial não pode ser maior que a data final.</p>').show();
                         }

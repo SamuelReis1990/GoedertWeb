@@ -13,7 +13,7 @@
     <div class="col-md-12 text-center">
         <button type="button" id="btnGravarNovaPessoa" class="btn btn-success btn-lg">
             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-            Incluir novamente
+            Cadastrar outra pessoa?
         </button>
     </div>
 </div>
@@ -72,8 +72,9 @@
                 $.notify('Erro ao carregar a tela de crud para inclusão de novas pessoas...', { clickToHide: true, autoHide: false });
             });
         }
-
+        
         CarregaTelaCrud();
+
     });
 
     function LimparForm() {

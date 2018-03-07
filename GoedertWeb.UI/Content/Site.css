@@ -1,4 +1,6 @@
-﻿body {
+﻿@import url(//fonts.googleapis.com/css?family=Merriweather+Sans);
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -21,4 +23,36 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.fundoBody {
+    background-image: url('img/Controle_rapido_fundo.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.panel-entrar {
+    margin-top: 30%;
+    border-color: #ccc;
+    -webkit-box-shadow: 0px 2px 3px 0px;
+    -moz-box-shadow: 0px 2px 3px 0px;
+    box-shadow: 0px 2px 3px 0px;
+}
+
+.img-logo-empresa {
+    margin-left: 35%;
+    padding-bottom: 5%;
+    background-image: url('img/controle_rapido_img.png');
+    background-repeat: no-repeat;   
+}
+
+.btn-entrar {    
+    background-color: #59B2E0 !important;
+    outline: none;
+    color: #fff;
+    height: auto;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin-left: 20%;
+    border-color: #59B2E6 !important;
 }

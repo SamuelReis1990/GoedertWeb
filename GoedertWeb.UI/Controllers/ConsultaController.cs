@@ -2,17 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace GoedertWeb.UI.Controllers
 {
     public class ConsultaController : Controller
-    {
+    {        
         // GET: Consulta
         public ActionResult Index()
-        {
+        {            
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult TelaConsulta()
+        {
+            return PartialView("Index");
         }
 
         [HttpPost]
@@ -98,6 +103,6 @@ namespace GoedertWeb.UI.Controllers
             var model = dadosPessoas.Where(t => t.id_pessoa == idPessoa).SingleOrDefault();
 
             return PartialView("_webCam", model);
-        }
+        } 
     }
 }

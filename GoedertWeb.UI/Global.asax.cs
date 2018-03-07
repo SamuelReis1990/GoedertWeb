@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -15,11 +14,11 @@ namespace GoedertWeb.UI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);            
-        }
+        }        
 
         protected void Session_Start(object sender, EventArgs e)
         {
-            Session["WEB_API"] = WebConfigurationManager.AppSettings["WEB_API"];
+            Session["WEB_API"] = WebConfigurationManager.AppSettings["WEB_API"];            
         }
     }
 }

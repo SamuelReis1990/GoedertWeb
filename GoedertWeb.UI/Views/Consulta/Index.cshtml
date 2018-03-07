@@ -47,10 +47,52 @@
 
 @section scripts{
 
+<script>    
+    $(document).ready(function () {
+        $('#pesquisarNome').autocomplete({            
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Session["WEB_API"].ToString()/api/pessoas/' + request.term + '/autoCompletePessoas',
+                    method: 'GET',
+                    dataType: 'json'
+                }).done(function (data, status) {
+                    response(data);
+                }).fail(function (data, status) {
+                    $.notify('Erro ao recuperar os dados para realizar o auto complete...', { clickToHide: true, autoHide: false });
+                });
+            },
+            minLength: 3,
+            select: function (event, ui) {
+                GetPessoas(ui.item.label);
+            }
+        });
+
+        $('#pesquisarDocumento').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Session["WEB_API"].ToString()/api/documentos/' + request.term + '/autoCompleteDocumentos',
+                    method: 'GET',
+                    dataType: 'json'
+                }).done(function (data, status) {
+                    response(data);
+                }).fail(function (data, status) {
+                    $.notify('Erro ao recuperar os dados para realizar o auto complete...', { clickToHide: true, autoHide: false });
+                });
+            },
+            minLength: 3,
+            select: function (event, ui) {
+                GetDocumentos(ui.item.label);
+            }
+        });
+    });
+
+</script>
+
+}
+
 <script>
 
     $(document).ready(function () {
-
         $('#pesquisarNome').autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -86,9 +128,6 @@
                 GetDocumentos(ui.item.label);
             }
         });
-
     });
 
 </script>
-
-}
