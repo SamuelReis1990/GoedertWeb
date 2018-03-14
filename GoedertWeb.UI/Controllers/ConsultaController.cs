@@ -75,6 +75,20 @@ namespace GoedertWeb.UI.Controllers
                                 dadosDocumento.descricao = "";
                                 dadosDocumento.numero = "";
                             }
+
+                            if (!String.IsNullOrEmpty(dadosDocumento.dt_emissao))
+                            {
+                                dadosDocumento.dt_emissao = dadosDocumento.dt_emissao.Replace("T00:00:00", "");
+                                string[] dt_emissao = dadosDocumento.dt_emissao.Split('-');
+                                dadosDocumento.dt_emissao = dt_emissao[2] + '/' + dt_emissao[1] + '/' + dt_emissao[0];
+                            }
+
+                            if (!String.IsNullOrEmpty(dadosDocumento.dt_validade))
+                            {
+                                dadosDocumento.dt_validade = dadosDocumento.dt_validade.Replace("T00:00:00", "");
+                                string[] dt_validade = dadosDocumento.dt_validade.Split('-');
+                                dadosDocumento.dt_validade = dt_validade[2] + '/' + dt_validade[1] + '/' + dt_validade[0];
+                            }
                         }
                     }
                 }

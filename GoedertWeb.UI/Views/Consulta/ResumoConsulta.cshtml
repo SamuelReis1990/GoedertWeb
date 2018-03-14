@@ -1,4 +1,5 @@
 ﻿<hr />
+@{List<string> documento = new List<string>(); }    
 @if (Model.Count > 0)
 {
     foreach (var dadosPessoas in Model)
@@ -38,6 +39,8 @@
                                     {
                                         @dadosDocumentos.descricao
                                         <br />
+
+
                                         <input type="hidden" id="numeroDocumento" value="@dadosDocumentos.numero" />
                                     }
                                 </i>
@@ -45,8 +48,15 @@
                         </td>
                     </tr>
                     <tr>
+                        @{
+                            documento = new List<string>();
+                            foreach (var dadosDocumentos in dadosPessoas.dadosDocumentos)
+                            {
+                                documento.Add(dadosDocumentos.id_documento);                                
+                            }
+                        }
                         <td class="btn-group">
-                            <button type="button" class="btn btn-primary" onclick="ModalAlteraPessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">
+                            <button type="button" id="btn-modal-alterar_@dadosPessoas.id_pessoa" class="btn btn-primary" data-documento=@Html.Raw(Json.Encode(documento)) onclick="ModalAlteraPessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                 Alterar
                             </button>
@@ -58,7 +68,7 @@
                     </tr>
                 </table>
             </div>
-        </div>
+        </div>        
         <input type="hidden" id="idPessoaModal" value="" />
         <input type="hidden" id="nomePessoaModal" value="" />
     }
@@ -69,18 +79,18 @@ else
 }
 
 <div id="modalPessoas" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" style="max-width:1000px; width:auto;">
+    <div class="modal-dialog" style="max-width:1000px; width:auto; overflow-y:initial;">
         <div class="modal-content">
             <div class="modal-header text-center">
                 <h3>
                     <label class="modal-title text-center label label-primary"></label>
                 </h3>
             </div>
-            <div class="modal-body modal-body-dados-pessoas" style="max-height:1000px; height:auto;">
+            <div class="modal-body modal-body-dados-pessoas" style="max-height:400px; overflow-y:auto">
             </div>
             <div class="modal-footer">
                 <div class="div-footer-modal-pessoa">
-                    <button type="button" class="btn btn-success btn-alterar-pessoa" style="display:none;" onclick="AlterarPessoa();">
+                    <button type="button" class="btn btn-success btn-alterar-pessoa" style="display:none;" onclick="Alteracao();">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         Alterar
                     </button>
@@ -124,7 +134,7 @@ else
 
 <script>
 
-    var model = @Html.Raw(Json.Encode(Model))
+    var model = @Html.Raw(Json.Encode(Model))    
 
     function ModalDetalhePessoa(id_pessoa, nome) {
         $('#nomePessoaModal').val(nome);
@@ -143,6 +153,7 @@ else
             })
         }).done(function (data, status) {
             $('.modal-body-dados-pessoas').html(data);
+            $(".modal-body-dados-pessoas").scrollTop(0);
             $('.modal-title').html('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Detalhes de ' + $('#nomePessoaModal').val());
             $('#modalPessoas').modal();
         }).fail(function (data, status) {
@@ -168,6 +179,7 @@ else
             })
         }).done(function (data, status) {
             $('.modal-body-dados-pessoas').html(data);
+            $(".modal-body-dados-pessoas").scrollTop(0);
             $('.modal-title').html('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Alteração de ' + $('#nomePessoaModal').val());
             $('#modalPessoas').modal();
         }).fail(function (data, status) {
@@ -182,8 +194,33 @@ else
         $('#modalRemoverPessoas').modal();
     }
 
-    function AlterarPessoa() {
-        var formPessoa = $('#formDadosPessoa').serializeArray();
+    function Alteracao()
+    {
+        var documento = $('#btn-modal-alterar_' + $('#idPessoaModal').val()).data('documento');
+
+        for (i = 0; i < documento.length; i++)
+        {            
+            var retorno = AlterarDocumentos(documento[i]);
+
+            if (!retorno)
+            {
+                break;
+            }
+        }
+
+        if (retorno)
+        {
+            AlterarPessoa();
+        }
+        else
+        {
+            $.notify('Erro ao atualizar...', { clickToHide: true, autoHide: false });
+        }
+    }
+
+    function AlterarPessoa()
+    {
+        var fieldSetDadosPessoa = $('#fieldSetDadosPessoa').serializeArray();
         var fotoString = $('img[alt="foto_' + $('#idPessoaModal').val() + '"]').attr('src');
 
         if (fotoString.includes('sem_imagem.png'))
@@ -195,17 +232,17 @@ else
             fotoString = fotoString.replace('data:image/png;base64,', '');
         }
 
-        var formPessoaJson = { foto_string: fotoString };
-        $.each(formPessoa,
+        var fieldSetDadosPessoaJson = { foto_string: fotoString };
+        $.each(fieldSetDadosPessoa,
             function (i, v) {
-                formPessoaJson[v.name] = v.value;
+                fieldSetDadosPessoaJson[v.name] = v.value;
             });
 
         $.ajax({
             url: '@Session["WEB_API"].ToString()/api/pessoas/' + $('#idPessoaModal').val() + '/atualizarPessoas',
             method: 'POST',
             dataType: 'json',
-            data: formPessoaJson
+            data: fieldSetDadosPessoaJson
         }).done(function (data, status) {
             if (data.mensagemRetorno.includes('sucesso'))
                 {
@@ -237,6 +274,30 @@ else
         });
     }
 
+    function AlterarDocumentos(idDocumento)
+    {
+        var fieldSetDadosDocumentos = $('#fieldSetDadosDocumentos_' + idDocumento).serializeArray();        
+        var fieldSetDadosDocumentosJson = { id_pessoa: $('#idPessoaModal').val() };
+
+        $.each(fieldSetDadosDocumentos,
+            function (i, v) {
+                fieldSetDadosDocumentosJson[v.name] = v.value;
+            });
+        
+        $.ajax({
+            url: '@Session["WEB_API"].ToString()/api/documentos/' + idDocumento + '/atualizarDocumentos',
+            method: 'POST',
+            dataType: 'json',
+            async: false,
+            data: fieldSetDadosDocumentosJson
+        }).done(function (data, status) {        
+            return true;
+        }).fail(function (data, status) {
+            return false;
+        });
+        return true;
+    }
+
     function RemoverPessoa() {
         $.ajax({
             url: '@Session["WEB_API"].ToString()/api/pessoas/' + $('#idPessoaModal').val() + '/removerPessoas',
@@ -257,7 +318,7 @@ else
                         else if('@ViewBag.TIPO_PESQUISA' == 'D')
                         {
                             GetDocumentos($('#numeroDocumento').val());
-                        }                        
+                        }
                     }
                     else
                     {

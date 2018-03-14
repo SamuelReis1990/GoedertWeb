@@ -1,78 +1,207 @@
 ﻿<form id="formDadosPessoa" method="post">
-    <fieldset id="fieldSetDadosPessoa">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h4 class="panel-title"><span id="formCamera" onclick="CarregaWebCam();" class="glyphicon glyphicon-camera" aria-hidden="true" style="cursor:pointer;  display:none;"></span></h4>
-            </div>
-            <div class="panel-body" style="margin-left:10px">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4 class="panel-title"><span id="formCamera" onclick="CarregaWebCam();" class="glyphicon glyphicon-camera" aria-hidden="true" style="cursor:pointer;  display:none;"></span></h4>
+        </div>
+        <div class="panel-body" style="margin-left:10px">
+            <fieldset id="fieldSetDadosPessoa">
                 <div class="row">
-                    <div class="row">
-                        <div class="col-md-4 form-group">
-                            <label for="nomePessoaForm" class="control-label text-primary">Nome: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                                </span>
-                                <input id="nomePessoaForm" name="nome" type="text" class="form-control" placeholder="Digite o nome" value="@Model.nome" data-minlength="3" data-error="Por favor, informe um nome com no mínimo 3 caracteres." required>
-                            </div>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label for="tipoPessoaForm" class="control-label text-primary">Tipo de pessoa: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-                                </span>
-                                <select class="form-control" id="tipoPessoaForm" name="id_tipo_pessoa" data-error="Por favor, informe um tipo de pessoa." required></select>
-                            </div>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label for="sexo" class="control-label text-primary">Sexo: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
-                            <div class="input-group" style="margin-right:10px;">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-                                </span>
-                                <select class="form-control" id="sexo" name="sexo" data-error="Por favor, informe o sexo." required>
-                                    <option value="" style="display:none;">Selecione o sexo</option>
-                                    <option value="M">Masculino</option>
-                                    <option value="F">Feminino</option>
-                                </select>
-                            </div>
-                            <div class="help-block with-errors"></div>
-                        </div>
+                    <div class="col-md-4 form-group" style="padding-left: 0%;">
+                        <p style="border-bottom: 1px solid #ccc; font-size: 16px; color: #337ab7;"><span class="glyphicon glyphicon-menu-right" aria-hidden="true" /> Dados Pessoa</p>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 form-group">
-                            <label for="datepicker" class="control-label text-primary">Data Validade:</label>
-                            <div class="input-daterange input-group form-group" id="datepicker">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                </span>
-                                <input type="text" class="input-sm form-control data-date-format='dd/mm/aaaa'" style="height:35px;" id="dataIniVal" name="dt_ini_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_ini_val" data-validaDataInicial />
-                                <span class="input-group-addon">até</span>
-                                <input type="text" class="input-sm form-control" style="height:35px;" id="dataFimVal" name="dt_fim_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_fim_val" data-validaDataFinal />
+                </div>
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label for="nomePessoaForm" class="control-label text-primary">Nome: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            </span>
+                            <input id="nomePessoaForm" name="nome" type="text" class="form-control" placeholder="Digite o nome" value="@Model.nome" data-minlength="3" data-error="Por favor, informe um nome com no mínimo 3 caracteres." required>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label for="tipoPessoaForm" class="control-label text-primary">Tipo Pessoa: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                            </span>
+                            <select class="form-control" id="tipoPessoaForm" name="id_tipo_pessoa" data-error="Por favor, informe um tipo de pessoa." required></select>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label for="sexo" class="control-label text-primary">Sexo: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
+                        <div class="input-group" style="margin-right:10px;">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                            </span>
+                            <select class="form-control" id="sexo" name="sexo" data-error="Por favor, informe o sexo." required>
+                                <option value="" style="display:none;">Selecione o sexo</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                            </select>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label for="datepicker" class="control-label text-primary">Data Validade:</label>
+                        <div class="input-daterange input-group form-group" id="datepicker">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </span>
+                            <input type="text" class="input-sm form-control data-date-format='dd/mm/aaaa'" style="height:35px;" id="dataIniVal" name="dt_ini_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_ini_val" data-validaDataInicial />
+                            <span class="input-group-addon">até</span>
+                            <input type="text" class="input-sm form-control" style="height:35px;" id="dataFimVal" name="dt_fim_val_string" placeholder="dd/mm/aaaa" value="@Model.dt_fim_val" data-validaDataFinal />
+                        </div>
+                        <div id="divMensagemErroData" style="display:none;" class="text-danger"></div>
+                    </div>
+                </div>
+                <input id="fotoString" type="hidden" value="" />
+            </fieldset>
+            @if (Model.dadosDocumentos != null && Model.dadosDocumentos.Count > 0)
+            {
+                <div class="row">
+                    <div class="col-md-4 form-group" style="padding-left: 0%;">
+                        <p style="border-bottom: 1px solid #ccc; font-size: 16px; color: #337ab7;"><span class="glyphicon glyphicon-menu-right" aria-hidden="true" /> Dados Documentos</p>
+                    </div>
+                </div>
+                foreach (var dadosDocumentos in Model.dadosDocumentos)
+                {
+                    <fieldset id="fieldSetDadosDocumentos_@dadosDocumentos.id_documento" class="fieldSetDadosDocumentos">
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <label for="tipoDocumentoForm" class="control-label text-primary">Tipo Documento: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                                    </span>
+                                    <select class="form-control tipoDocumentoForm" id="tipoDocumentoForm_@dadosDocumentos.id_tipo_documento" name="id_tipo_documento" data-id_tipo_documento="@dadosDocumentos.id_tipo_documento" data-error="Por favor, informe um tipo de documento." required></select>
+                                </div>
+                                <div class="help-block with-errors"></div>
                             </div>
-                            <div id="divMensagemErroData" style="display:none;" class="text-danger"></div>
+                            <div class="col-md-4 form-group">
+                                <label for="numeroDocumentoForm" class="control-label text-primary">Número Documento: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
+                                <div>
+                                    <input id="numeroDocumentoForm" name="numero" type="number" class="form-control" placeholder="Digite o número do documento" value="@dadosDocumentos.numero" data-error="Por favor, informe um número de documento." required>
+                                </div>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label for="emissorDocumentoForm" class="control-label text-primary">Emissor Documento: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
+                                <div>
+                                    <input id="emissorDocumentoForm" name="emissor" type="text" class="form-control" placeholder="Digite o nome do emissor do documento" value="@dadosDocumentos.emissor" data-minlength="3" data-error="Por favor, informe um número de documento." required>
+                                </div>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 form-group">
-                            <p class="text-muted small"><i>Os campos com </i><span style="color:red;" class="glyphicon glyphicon-asterisk" aria-hidden="true"></span><i> são obrigatórios</i></p>
+                        <div class="row">
+                            <div class="col-md-2 form-group">
+                                <label for="datepicker" class="control-label text-primary">Data Validade: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
+                                <div class="input-daterange input-group form-group" id="datepicker">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    </span>
+                                    <input type="text" onchange="ValidaDataValidade('@dadosDocumentos.id_documento');" class="input-sm form-control data-date-format='dd/mm/aaaa' dataValidade" style="height:35px;" id="dataValidade_@dadosDocumentos.id_documento" name="dt_validade_string" placeholder="dd/mm/aaaa" value="@dadosDocumentos.dt_validade" />
+                                </div>
+                                <div id="divMensagemErroDataValidade_@dadosDocumentos.id_documento" style="display:none;" class="text-danger"></div>
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <label for="datepicker" class="control-label text-primary">Data Emissão: <span style="color:red;" class="glyphicon glyphicon-asterisk small" aria-hidden="true"></span></label>
+                                <div class="input-daterange input-group form-group" id="datepicker">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    </span>
+                                    <input type="text" onchange="ValidaDataEmissao('@dadosDocumentos.id_documento');" class="input-sm form-control data-date-format='dd/mm/aaaa' dataEmissao" style="height:35px;" id="dataEmissao_@dadosDocumentos.id_documento" name="dt_emissao_string" placeholder="dd/mm/aaaa" value="@dadosDocumentos.dt_emissao" />
+                                </div>
+                                <div id="divMensagemErroDataEmissao_@dadosDocumentos.id_documento" style="display:none;" class="text-danger"></div>
+                            </div>
                         </div>
-                    </div>
+                    </fieldset>
+                }
+            }
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <p class="text-muted small"><i>Os campos com </i><span style="color:red;" class="glyphicon glyphicon-asterisk" aria-hidden="true"></span><i> são obrigatórios</i></p>
                 </div>
             </div>
         </div>
-        <input id="fotoString" type="hidden" value="" />
-    </fieldset>
+    </div>
 </form>
 
 <script>
 
-    $(document).ready(function () {        
+    function ValidaDataValidade(idDocumento) {        
+        if ($('#dataValidade_' + idDocumento).val() == '')
+        {
+            $('.btn-alterar-pessoa').prop('disabled', true);
+            return $('#divMensagemErroDataValidade_' + idDocumento).html('<p>Por favor, informe a data de validade do documento.</p>').show();
+        }
+        else
+        {
+            $('.btn-alterar-pessoa').prop('disabled', false);
+            $('#divMensagemErroDataValidade_' + idDocumento).hide();
+        }
 
-        $('#formDadosPessoa').validator({            
+        if ($('#dataValidade_' + idDocumento).val() != '' && $('#dataEmissao_' + idDocumento).val() != '') {
+
+            var datVal = $('#dataValidade_' + idDocumento).val().split("/");
+            var datEmi = $('#dataEmissao_' + idDocumento).val().split("/");
+            datVal = new Date(datVal[1] + "/" + datVal[0] + "/" + datVal[2]);
+            datEmi = new Date(datEmi[1] + "/" + datEmi[0] + "/" + datEmi[2]);
+
+            if (datVal < datEmi)
+            {
+                $('.btn-alterar-pessoa').prop('disabled', true);
+                return $('#divMensagemErroDataValidade_' + idDocumento).html('<p>Data de validade não pode ser menor que a data de emissão.</p>').show();
+            }
+            else
+            {
+                $('.btn-alterar-pessoa').prop('disabled', false);
+                $('#divMensagemErroDataValidade_' + idDocumento).hide();
+            }
+        }
+    }
+
+    function ValidaDataEmissao(idDocumento)
+    {
+        if ($('#dataEmissao_' + idDocumento).val() == '')
+        {
+            $('.btn-alterar-pessoa').prop('disabled', true);
+            return $('#divMensagemErroDataEmissao_' + idDocumento).html('<p>Por favor, informe a data de emissão do documento.</p>').show();            
+        }
+        else
+        {
+            $('.btn-alterar-pessoa').prop('disabled', false);
+            $('#divMensagemErroDataEmissao_' + idDocumento).hide();            
+        }
+
+        if ($('#dataValidade_' + idDocumento).val() != '' && $('#dataEmissao_' + idDocumento).val() != '') {
+
+            var dtVal = $('#dataValidade_' + idDocumento).val().split("/");
+            var dtEmi = $('#dataEmissao_' + idDocumento).val().split("/");
+            dtVal = new Date(dtVal[1] + "/" + dtVal[0] + "/" + dtVal[2]);
+            dtEmi = new Date(dtEmi[1] + "/" + dtEmi[0] + "/" + dtEmi[2]);
+
+            if (dtEmi > dtVal)
+            {
+                $('.btn-alterar-pessoa').prop('disabled', true);
+                return $('#divMensagemErroDataEmissao_' + idDocumento).html('<p>Data de emissão não pode ser maior que a data de validade.</p>').show();
+            }
+            else
+            {
+                $('.btn-alterar-pessoa').prop('disabled', false);
+                $('#divMensagemErroDataEmissao_' + idDocumento).hide();                
+            }
+        }
+    }
+
+    $(document).ready(function () {
+
+        $('#formDadosPessoa').validator({
             custom: {
                 'validaDataInicial': function ($el) {
                     if ($('#dataIniVal').val() != '' && $('#dataFimVal').val() != '') {
@@ -90,13 +219,13 @@
                     }
                 },
                 'validaDataFinal': function ($el) {
-                    if ($('#dataFimVal').val() != '' && $('#dataIniVal').val() != '') {  
+                    if ($('#dataFimVal').val() != '' && $('#dataIniVal').val() != '') {
 
                         var datIni = $('#dataIniVal').val().split("/");
                         var datFim = $('#dataFimVal').val().split("/");
                         datIni = new Date(datIni[1] + "/" + datIni[0] + "/" + datIni[2]);
                         datFim = new Date(datFim[1] + "/" + datFim[0] + "/" + datFim[2]);
-                        
+
                         if (datIni > datFim) {
 
                             return $('#divMensagemErroData').html('<p>Data inicial não pode ser maior que a data final.</p>').show();
@@ -150,9 +279,16 @@
         $('#dataFimVal').mask('99/99/9999');
         $('#dataFimVal').datepicker({ orientation: 'bottom auto', autoclose: true, format: 'dd/mm/yyyy', forceParse: true, language: 'pt-BR', forceParse: true });
 
+        $('.dataValidade').mask('99/99/9999');
+        $('.dataValidade').datepicker({ orientation: 'bottom auto', autoclose: true, format: 'dd/mm/yyyy', forceParse: true, language: 'pt-BR', forceParse: true });
+
+        $('.dataEmissao').mask('99/99/9999');
+        $('.dataEmissao').datepicker({ orientation: 'bottom auto', autoclose: true, format: 'dd/mm/yyyy', forceParse: true, language: 'pt-BR', forceParse: true });
+
         $('#sexo').val('@Model.sexo');
 
         GetTiposPessoas();
+        GetTiposDocumentos();
 
         function GetTiposPessoas() {
 
@@ -185,11 +321,43 @@
             });
         }
 
+        function GetTiposDocumentos() {
+            $('.tipoDocumentoForm').empty();
+
+            $.ajax({
+                url: '@Session["WEB_API"].ToString()/api/documentos/ListarTiposDocumentos',
+                method: 'GET',
+                dataType: 'json'
+            }).done(function (data, status) {
+
+                if ('@ViewBag.IND_ACAO' == 'I') {
+                    $('.tipoDocumentoForm').append($('<option>', {
+                            value: '',
+                            text: 'Selecione o tipo de documento'
+                        }));
+                    }
+
+                $.each(data, function (i, item) {
+                    $('.tipoDocumentoForm').append($('<option>', {
+                        value: item.id_tipo_documento,
+                        text: item.descricao
+                    }));
+
+                    $('#tipoDocumentoForm_' + item.id_tipo_documento).val($('#tipoDocumentoForm_' + item.id_tipo_documento).data('id_tipo_documento'));
+
+                });
+
+            }).fail(function (data, status) {
+                $.notify('Erro ao recuperar o tipo de documento...', { clickToHide: true, autoHide: false });
+            });
+        }
+
         function VerificaIndAcao()
         {
             if ('@ViewBag.IND_ACAO' == 'D')
             {
-                $('#fieldSetDadosPessoa').prop('disabled', true)
+                $('#fieldSetDadosPessoa').prop('disabled', true);
+                $('.fieldSetDadosDocumentos').prop('disabled', true);
             }
         }
 
