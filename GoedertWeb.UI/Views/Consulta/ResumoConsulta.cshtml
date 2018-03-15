@@ -60,7 +60,7 @@
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                 Alterar
                             </button>
-                            <button type="button" class="btn btn-danger" onclick="ModalRemoverPessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">
+                            <button type="button" id="btn-modal-remover_@dadosPessoas.id_pessoa" class="btn btn-danger" data-documento=@Html.Raw(Json.Encode(documento)) onclick="ModalRemoverPessoa('@dadosPessoas.id_pessoa', '@Html.Raw(dadosPessoas.nome)');">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                 Remover
                             </button>
@@ -115,7 +115,7 @@ else
             </div>
             <div class="modal-footer">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-danger" onclick="RemoverPessoa();">
+                    <button type="button" class="btn btn-danger" onclick="Exclusao();">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         Sim
                     </button>
@@ -134,7 +134,7 @@ else
 
 <script>
 
-    var model = @Html.Raw(Json.Encode(Model))    
+    var model = @Html.Raw(Json.Encode(Model))
 
     function ModalDetalhePessoa(id_pessoa, nome) {
         $('#nomePessoaModal').val(nome);
@@ -199,7 +199,7 @@ else
         var documento = $('#btn-modal-alterar_' + $('#idPessoaModal').val()).data('documento');
 
         for (i = 0; i < documento.length; i++)
-        {            
+        {
             var retorno = AlterarDocumentos(documento[i]);
 
             if (!retorno)
@@ -276,21 +276,55 @@ else
 
     function AlterarDocumentos(idDocumento)
     {
-        var fieldSetDadosDocumentos = $('#fieldSetDadosDocumentos_' + idDocumento).serializeArray();        
+        var fieldSetDadosDocumentos = $('#fieldSetDadosDocumentos_' + idDocumento).serializeArray();
         var fieldSetDadosDocumentosJson = { id_pessoa: $('#idPessoaModal').val() };
 
         $.each(fieldSetDadosDocumentos,
             function (i, v) {
                 fieldSetDadosDocumentosJson[v.name] = v.value;
             });
-        
+
         $.ajax({
             url: '@Session["WEB_API"].ToString()/api/documentos/' + idDocumento + '/atualizarDocumentos',
             method: 'POST',
             dataType: 'json',
             async: false,
             data: fieldSetDadosDocumentosJson
-        }).done(function (data, status) {        
+        }).done(function (data, status) {
+            return true;
+        }).fail(function (data, status) {
+            return false;
+        });
+        return true;
+    }
+
+    function Exclusao() {        
+        var documento = $('#btn-modal-remover_' + $('#idPessoaModal').val()).data('documento');
+
+        for (i = 0; i < documento.length; i++) {
+            var retorno = RemoverDocumentos(documento[i]);
+
+            if (!retorno) {
+                break;
+            }
+        }
+
+        if (retorno) {
+            RemoverPessoa();
+        }
+        else {
+            $.notify('Erro ao remover...', { clickToHide: true, autoHide: false });
+        }
+    }
+
+    function RemoverDocumentos(idDocumento)
+    {
+        $.ajax({
+            url: '@Session["WEB_API"].ToString()/api/documentos/' + idDocumento + '/removerDocumentos',
+            method: 'POST',
+            dataType: 'json',
+            async: false
+        }).done(function (data, status) {
             return true;
         }).fail(function (data, status) {
             return false;
